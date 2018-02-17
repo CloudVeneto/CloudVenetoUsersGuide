@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="ManagingImages">
+<title>Managing Images</title>
+<para>
+In a cloud environment, Virtual Machines are instantiated from images. These 
+images are registered in an Image Management Service, in our case provided by 
+the Glance OpenStack component. 
+</para>
+
+<section id="PublicImages">
+<title>Public Images</title>
+<para>
+Some images in the CloudVeneto are provided by the Cloud 
+administrators. These images are public, and visible to all users.
+They appear in the <menuchoice><guimenu>Public</guimenu></menuchoice> 
+tab of the <menuchoice><guimenu>Images</guimenu></menuchoice> 
+menu.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/public_images.png"/>
+  <imagedata condition="pdf" fileref="./images/public_images.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+<para>
+In the CloudVeneto cloud images are provided in QCOW2 format.
+They are fully resizable also with respect to the disk size.
+</para>
+
+
+</section>
+
+<section id="UserProvidedImages">
+<title>User Provided Images</title>
+<para>
+Along with the standard images, users can provide their own images
+and upload them to the Cloud Image service:
+these images are private, meaning that they are only available to the users 
+of the project they are uploaded for.
+</para>
+
+<note><para>
+Users are not allowed to publish public (i.e. available to all projects) 
+images.
+This means you cannot use the <literal>--public</literal> flag
+with the <literal> glance image-create</literal> command, otherwise you will 
+get a quite cryptic error message such as:
+
+<screen>
+Request returned failure status.
+403 Forbidden
+Access was denied to this resource.
+    (HTTP 403)
+</screen>
+</para></note>
+
+
+<para>
+Many open source projects such as Ubuntu and Fedora now produce pre-built 
+images which can be used for certain clouds. If these are available, it is 
+much easier to use them compared to building your own.
+
+<itemizedlist>
+   <listitem><para><ulink url="https://getfedora.org/cloud/">Fedora repository</ulink></para></listitem> 
+   <listitem><para><ulink url="https://cloud-images.ubuntu.com/">Ubuntu repository</ulink></para></listitem> 
+</itemizedlist>
+
+</para>
+
+<para>
+Using an Ubuntu image as an example, after you downloaded the
+image from the relevant web site, to upload such image 
+using the command line tools you need to:
+
+<itemizedlist>
+   <listitem><para>Authenticate to OpenStack using the openrc source:
+      <screen>
+$ . demo-openrc.sh
+      </screen>
+   </para></listitem>
+   <listitem><para>Issue th following command:
+      <screen>
+$ glance image-create --name=ubuntu-trusty --disk-format=qcow2 \
+      --container-format=bare --property hypervisor_type=qemu \
+      --file trusty-server-cloudimg-amd64-disk1.img
+      </screen>
+   </para></listitem>
+</itemizedlist>
+
+Once loaded, the image can then be used to create virtual machines. 
+</para>
+
+<para>
+Some system software is delivered in ISO image format. 
+For example, these steps show how to create an image from the Freedos ISO 
+available from <ulink url="http://www.freedos.org/download/download/fd11src.iso">here</ulink>
+
+<screen>
+$ glance image-create --name freedos11 --disk-format=iso \
+--container-format=bare --file=fd11src.iso
+</screen>
+</para>
+
+
+<note><para>
+In the CloudVeneto cloud image size is limited to 25 GB.
+</para></note>
+
+
+<warning><para>
+No backup is currently done on user provided images or snapshots.
+Therefore users with private images should keep a copy of the images they 
+have uploaded in their private archives. 
+</para></warning>
+
+
+
+
+</section>
+
+
+
+<section id="SharingImages">
+<title>Sharing Images</title>
+<para>
+As mentioned before, users are not allowed to publish public images.
+However images can be shared between different projects. This is currently only
+possible via the command line tools.
+</para>
+
+<para>
+If an image has been uploaded to your currently active project, using the
+procedure described in 
+<xref linkend="UserProvidedImages"/>, 
+you can then use the <command>glance member-create</command> operations to 
+share that image with another project.
+</para>
+
+<para>
+To share an image, first source the project profile for the 
+project containing the image you want to share and find its id with
+the <command>glance image-show</command> command
+(e0d35322-d509-4202-9b40-7d74e7aca0b6 in the 
+example):
+
+<screen>
+$ glance image-show ubuntu-trusty
++----------------------------+--------------------------------------+
+| Property                   | Value                                |
++----------------------------+--------------------------------------+
+| Property 'hypervisor_type' | qemu                                 |
+| checksum                   | 2538873a402068e7c48ba5e0b896d222     |
+| container_format           | bare                                 |
+| created_at                 | 2014-10-25T05:06:13                  |
+| deleted                    | False                                |
+| disk_format                | qcow2                                |
+| id                         | e0d35322-d509-4202-9b40-7d74e7aca0b6 |
+| is_public                  | False                                |
+| min_disk                   | 0                                    |
+| min_ram                    | 0                                    |
+| name                       | ubuntu-trusty                        |
+| owner                      | beaeede3841b47efb6b665a1a667e5b1     |
+| protected                  | False                                |
+| size                       | 255853056                            |
+| status                     | active                               |
+| updated_at                 | 2014-10-25T05:07:01                  |
++----------------------------+--------------------------------------+
+</screen>
+
+</para>
+
+<para>
+You now need to find the id of the project you wish to share the image with. 
+This will generally be done by looking at the openrc file of that project and 
+finding the <literal>OS_TENANT_ID</literal> variable (in this example, it is 
+65bf648d-8d07-48af-8c3a-fa162a5b283f).
+</para>
+
+<para>
+Using this tenant ID as an argument of the command line of 
+<command>member-create</command>, the image 
+(e0d35322-d509-4202-9b40-7d74e7aca0b6
+in this example) can then be shared:
+
+<screen>
+glance  member-create e0d35322-d509-4202-9b40-7d74e7aca0b6 65bf648d-8d07-48af-8c3a-fa162a5b283f # share it
+ 
+glance member-list --image-id e0d35322-d509-4202-9b40-7d74e7aca0b6 # check it is shared
+</screen>
+
+</para>
+
+</section>
+
+
+<section id="DeletingImages">
+<title>Deleting Images</title>
+
+<para>Images that are not used anymore can be deleted. Deletion of images is permanent and cannot be reversed.</para>
+
+<para>
+To delete an image, log in to the dashboard and select the appropriate project from the drop down menu at the top left.
+On the <menuchoice><guimenu>Compute</guimenu><guisubmenu>Images</guisubmenu></menuchoice> page select the images you want to delete
+and click <menuchoice><guimenu>Delete Images</guimenu></menuchoice>. 
+Confirm your action pressing the <menuchoice><guimenu>Delete Images</guimenu></menuchoice> again on the confirmation dialog box.
+</para>
+
+<warning><para>
+Don't delete an image if are there are virtual machines created using this image, otherwise these VMs won't be able to start if hard rebooted.
+</para></warning>
+</section>
+
+</chapter>

@@ -1,0 +1,845 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="AdministeringVMs">
+<title>Managing Virtual Machines</title>
+
+<section id="CreatingVMs">
+<title>Creating Virtual Machines</title>
+<para>
+To create a Virtual Machine (VM) using the dashboard, you need to have 
+already logged into the 
+dashboard, created your private key (as explained in 
+<xref linkend="CreatingAKeypair"/>) and set
+the security group (as discussed in <xref linkend="SecurityGroups"/>) to be
+used for this VM.
+</para>
+
+<para>
+To create a VM proceed as follows:
+</para>
+
+
+<itemizedlist>
+
+<listitem><para>
+Be sure you have selected the right Project from the dropdown menu on the top.
+</para></listitem>
+
+
+<listitem><para>
+Go to <menuchoice><guimenu>Compute</guimenu><guisubmenu>Instances</guisubmenu></menuchoice> on the left hand 
+menu. This will display a list of VMs currently running in your project.
+
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/instances.png" />
+  <imagedata condition="pdf" fileref="./images/instances.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para></listitem>
+
+
+
+
+<listitem><para>
+Select the <menuchoice><guimenu>"+ Launch Instance"</guimenu></menuchoice> 
+button. A new window appears. 
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/launchinstance.png" />
+  <imagedata condition="pdf" fileref="./images/launchinstance.png" width="450" />
+</imageobject>
+</mediaobject>
+
+Here you can enter:
+</para>
+
+
+<itemizedlist>
+
+<listitem><para>
+<menuchoice><guimenu>Instance name</guimenu></menuchoice> is the name of the 
+machine you want to create. 
+</para></listitem>
+
+<listitem><para>
+<menuchoice><guimenu>Flavor</guimenu></menuchoice> is the size of the machine 
+you want to create. These are specified using VCPUs (number of virtual CPUs, 
+disk space for the system disk, size for the RAM memory). You are advised to
+start small (the flavor of a virtual machine can be changed 
+later if required). Flavors are discussed in <xref linkend="Flavors"/>.
+</para></listitem>
+
+<listitem><para>
+<menuchoice><guimenu>Instance Count</guimenu></menuchoice> is the number
+of virtual machines to be started.
+</para></listitem> 
+
+<listitem><para>
+As <menuchoice><guimenu>Instance Boot Source</guimenu></menuchoice> 
+select <menuchoice><guimenu>Boot from Image</guimenu></menuchoice> or 
+<menuchoice><guimenu>Boot from Snapshot</guimenu></menuchoice> and then 
+specify its name.
+</para></listitem>
+
+</itemizedlist>
+</listitem>
+
+<listitem><para>
+Switch to the
+<menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice> tab.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/launch-accesssec.png" />
+  <imagedata condition="pdf" fileref="./images/launch-accesssec.png" width="450" />
+</imageobject>
+</mediaobject>
+
+ 
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+As <menuchoice><guimenu>Keypair</guimenu></menuchoice> 
+select the keypair you created. This will allow you to log in as root using 
+this SSH key.
+</para></listitem>
+
+
+<listitem><para>
+You can also specify the admin (usually root) password of the instance. 
+
+<warning><para>
+Please note that setting the admin password is not guaranteed to 
+always work (the image can't 
+support the “injection” of this password). It is therefore suggested to use 
+the ssh-key mechanisms.
+</para></warning>
+
+</para></listitem>
+
+<listitem><para>
+Specify the Security group to be used for this VM (security groups are 
+discussed in <xref linkend="SecurityGroups"/>).
+</para></listitem>
+
+
+</itemizedlist>
+</listitem>
+
+<listitem><para>
+Now switch to the <menuchoice><guimenu>Networking</guimenu></menuchoice> tab.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/launch-net.png" />
+  <imagedata condition="pdf" fileref="./images/launch-net.png" width="450" />
+</imageobject>
+</mediaobject>
+
+
+You should see one network called <replaceable>&lt;ProjectName&gt;-lan
+</replaceable> and, if the possibility to use public IP numbers
+was requested for your project,
+also another network called 
+<replaceable>&lt;ProjectName&gt;-wan</replaceable>.
+Select the former one if your VM doesn't need to be visible on the Internet. 
+Select instead the <replaceable>&lt;ProjectName&gt;-wan</replaceable>  
+network if your VM must have a public IP. You will then need to allocate a 
+public (floating) IP address to this instance, as explained in 
+<xref linkend="AllocatingFloating"/>. 
+
+<note><para>
+By default the possibility to use public IP numbers is disabled and
+therefore by default the <replaceable>&lt;ProjectName&gt;-wan</replaceable>
+network doesn't exist. If public IPs are needed for your
+project, please contact <email>cedc-support@lists.pd.infn.it</email>. 
+</para></note>
+
+</para></listitem>
+
+<listitem><para>
+Select <menuchoice><guimenu>Launch</guimenu></menuchoice> to start the 
+virtual machine being created. You will be returned to the <menuchoice><guimenu>Overview</guimenu></menuchoice> screen, 
+where there will be a line with the instance name, ip adress and status. The status 
+should be 'Active' once the install is complete.
+</para></listitem>
+
+</itemizedlist>
+
+<para>
+Once the status of the machine is 'Active', you can watch the console to see 
+it installing and booting. You can click on the VM name and go to a dedicated
+window or from this same table you can access a pull down menu on the right hand side under 
+<menuchoice><guimenu>More</guimenu></menuchoice>.
+There you will see various options and among them
+<menuchoice><guimenu>View Log</guimenu></menuchoice> and 
+<menuchoice><guimenu>Console</guimenu></menuchoice>. 
+
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/instance-more.png" />
+  <imagedata condition="pdf" fileref="./images/instance-more.png" width="450" />
+</imageobject>
+</mediaobject>
+
+For a Linux machine, 
+select <menuchoice><guimenu>Console</guimenu></menuchoice> to access to the 
+console of the VM.
+</para>
+
+
+<warning><para>
+Please note that Virtual Machines instantiated on the Cloud aren't
+registered in the DNS. This means that you'll have to refer to them
+using their IP numbers.
+</para></warning>
+
+
+</section>
+
+<section id="AccessingVMs">
+<title>Accessing Virtual Machines</title>
+
+<para>
+<warning><para>
+Please note that cloud VMs are not registered in the DNS, and therefore 
+you must use their IP address.
+</para></warning>
+</para>
+
+<para>
+Virtual machines created on the cloud have their IP assigned on a private
+network associated with the project they belong to, therefore they cannot
+be accessed directly from the internet.
+</para>
+
+<para>
+Projects that gets their private network on the subnet 10.65.0.0/16 are
+peculiar: the VMs can be accessed from the INFN or LNL lan. Those projects
+are created mostly for INFN internal use.
+</para>
+
+<para>
+If you need to log on your VMs from the Internet you must
+go through the <literal>cld-blu-gate.cedc.csia.unipd.it</literal> gate machine.
+When your account on the cloud is created you also got access to the gate.
+Contact <email>cedc-support@lists.pd.infn.it</email> in case of problems with this account.
+</para>
+
+<para>
+Assuming that
+<itemizedlist>
+   <listitem><para>
+      You created a Linux virtual machine using the <replaceable>&lt;ProjectName&gt;-lan</replaceable> network;
+   </para></listitem>
+   <listitem><para>
+      Your VM got the 10.64.15.3 IP address; The VM is CentOS based so there is a default user called 'centos';
+   </para></listitem>
+   <listitem><para>
+      You stored your <replaceable>my_key</replaceable> keypair in <replaceable>~/private</replaceable> on the gate machine;
+   </para></listitem>
+</itemizedlist>
+
+you can access your VM from the gate machine issuing
+
+<screen>
+$ ssh -i ~/private/my_key centos@10.64.15.3
+</screen>
+</para>
+
+<para>
+If needed, e.g. if a VM should host a service accessible from the 
+Internet, such VM on the Cloud can be given a public IP. For this purpose
+you will need:
+
+<itemizedlist>
+
+<listitem><para>
+to instantiate the VM on the <replaceable>&lt;ProjectName&gt;-wan</replaceable> 
+network;
+</para></listitem>
+
+<listitem><para>
+to allocate a floating (public) IP to the VM, as discussed in 
+<xref linkend="AllocatingFloating"/>.
+</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+
+<note><para>
+Please note that by default the possibility to use public IP numbers is disabled.
+If public IPs are needed for your project, please contact 
+<email>cedc-support@lists.pd.infn.it</email>.                
+</para></note>
+
+<para>
+To control which services/ports of your virtual machine can be accessed,
+be sure you are using the right security group (as discussed in <xref linkend="SecurityGroups"/>) 
+and you have correctly configured firewall (iptables, firewalld etc.) on the relevant VM.
+</para>
+
+
+</section>
+
+
+<section id="AccessingFromVMs">
+<title>Accessing other hosts/services from Virtual Machines</title>
+
+<para>
+From a VM on the Cloud it is possible to access the outside 
+Internet network but by default it is not possible to      
+access a host/service hosted in Padova or Legnaro. 
+If, for some reasons, you need to access some
+services hosted in Padova or Legnaro from the Cloud, please contact
+<email>cedc-support@lists.pd.infn.it</email>.
+</para>
+</section>
+
+
+<section id="AllocatingFloating">
+<title>Allocating a public (floating) IP address to a Virtual Machine</title>
+
+
+<para>
+When an instance is created in OpenStack, it is automatically assigned a 
+fixed IP address.
+If a VM needs to be visible on the Internet, in addition to the fixed IP 
+address a public (floating) IP address must be attached to the instance.
+Floating IP addresses can have their associations modified at any time, 
+regardless of the state of the instances involved. 
+</para>
+
+<para>
+To assign a floating IP to a VM, first of all create the VM
+as described in <xref linkend="CreatingVMs"/>, 
+using the <replaceable>&lt;ProjectName&gt;-wan</replaceable> network.
+The following procedure then details the reservation of a floating IP address 
+from an existing pool of public addresses and the association of that 
+address with a specific instance.
+
+
+<itemizedlist>
+
+<listitem><para>
+From the dashboard click 
+<menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice> on the <menuchoice><guimenu>Compute</guimenu></menuchoice> menu.
+</para></listitem>
+
+
+<listitem><para>
+Click the <menuchoice><guimenu>Floating IPs</guimenu></menuchoice> tab, 
+which shows the floating IP addresses allocated to instances.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/floatingips.png" />
+  <imagedata condition="pdf" fileref="./images/floatingips.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para></listitem>
+
+<listitem><para>
+
+Click <menuchoice><guimenu>Allocate IP To Project</guimenu></menuchoice>.
+
+</para></listitem>
+
+<listitem><para> 
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/allocatefloatingip.png" />
+  <imagedata condition="pdf" fileref="./images/allocatefloatingip.png" width="450" />
+</imageobject>
+</mediaobject>
+
+
+Choose the pool from which to pick the 
+IP address and click <menuchoice><guimenu>Allocate IP</guimenu></menuchoice>. 
+</para></listitem>
+
+
+<listitem><para> 
+Click on the <menuchoice><guimenu>Associate</guimenu></menuchoice> for the
+just allocated floating IP.
+</para></listitem>
+
+<listitem><para> 
+In the <menuchoice><guimenu>Manage Floating IP 
+Associations</guimenu></menuchoice> dialog box, choose the following options:
+
+<itemizedlist>
+
+<listitem><para> 
+The <menuchoice><guimenu>IP Address</guimenu></menuchoice> field is filled 
+automatically, but you can add a new IP address by clicking the + button
+</para></listitem>
+
+<listitem><para>
+In the <menuchoice><guimenu>Ports to be associated</guimenu></menuchoice> 
+field, select a port from the list (the list shows all the instances with 
+their fixed IP addresses).
+</para></listitem>
+
+</itemizedlist>
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/associatefloatingip.png" />
+  <imagedata condition="pdf" fileref="./images/associatefloatingip.png" width="450" />
+</imageobject>
+</mediaobject>
+
+
+
+</para></listitem>
+
+
+<listitem><para>
+Finally click  <menuchoice><guimenu>Associate</guimenu></menuchoice>.
+</para></listitem>
+
+
+</itemizedlist>
+
+
+</para>
+
+
+<para>
+To disassociate an IP address from an instance, click the 
+<menuchoice><guimenu>Disassociate</guimenu></menuchoice> button.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/disassociatefloatingip.png" />
+  <imagedata condition="pdf" fileref="./images/disassociatefloatingip.png" width="450" />
+</imageobject>
+</mediaobject>
+
+
+</para>
+
+<para>
+To release the floating IP address back into the pool of addresses, 
+click the <menuchoice><guimenu>More</guimenu></menuchoice> button 
+and select the <menuchoice><guimenu>Release Floating IP</guimenu></menuchoice>
+option.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/releasefloatingip.png" />
+  <imagedata condition="pdf" fileref="./images/releasefloatingip.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+
+<note><para>
+By default the possibility to use public IP numbers is disabled and  
+therefore by default it is not possible to allocate a floating
+IP to an instance.
+If public IPs are needed for your                              
+project, please contact <email>cedc-support@lists.pd.infn.it</email>
+specifying what is/are the relevant service(s) and the port(s) that need
+to be open.
+</para></note>
+
+
+</section>
+
+<section id="Flavors">
+<title>Flavors</title>
+
+<para>
+As shown in <xref linkend="CreatingVMs"/>, when an instance has to be created
+it is necessary to specify the flavor to be used for this VM.
+</para>
+
+<para>
+Flavors define the virtual machine size such as:
+
+<itemizedlist>
+<listitem><para>Number of virtual CPU cores (VCPUs)</para></listitem>
+<listitem><para>Amount of memory</para></listitem>
+<listitem><para>Disk space</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Information about the flavors can be seen in the
+<menuchoice><guimenu>Flavor Details</guimenu></menuchoice> box that
+appears in the Dashboard when you launch a new instance.
+
+<mediaobject>
+<imageobject>
+  <imagedata fileref="./images/flavor.png" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+<warning><para>
+For what concerns VCPUs, please note that the CloudVeneto is 
+configured to allow some “overbooking” so that a
+physical core is mapped to 4 VCPUs.
+</para></warning>
+
+<para>
+A disk size of 0 means that the size of the disk is the same as that in the
+image. For other cases, it may be necessary to resize the partitions.
+</para>
+
+<note><para>
+If you find that a specific flavor you require is not available, please
+contact <email>cedc-support@lists.pd.infn.it</email>.
+</para></note>
+
+
+</section>
+
+
+
+<section id="StoppingAndStartingVMs">
+<title>Stopping and Starting VMs</title>
+
+<para>
+VMs can be stopped and started in different ways available from the <menuchoice><guimenu>More</guimenu></menuchoice>
+menu of every instance found on the (<menuchoice><guimenu>Compute</guimenu><guisubmenu>Instances</guisubmenu></menuchoice>) table.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/instance-shutdown.png" />
+  <imagedata condition="pdf" fileref="./images/instance-shutdown.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+<warning><para>
+The cleanest way to shutdown (or reboot) an instance is 
+however to log on the VM and 
+issue from the shell the 
+<command>shutdown</command> or <command>reboot</command> command. In fact if the 
+<menuchoice><guimenu>Soft Reboot</guimenu></menuchoice> 
+or <menuchoice><guimenu>Hard Reboot</guimenu></menuchoice> or 
+<menuchoice><guimenu>Shutdown</guimenu></menuchoice> actions are chosen, 
+there could be problems with networking when the VM is later restarted.
+</para></warning>
+
+<para>
+<menuchoice><guimenu>Pause</guimenu></menuchoice>/<menuchoice><guimenu>Unpause</guimenu></menuchoice> 
+allows for temporary suspension of the VM. The VM is kept in 
+memory but it is not allocated any CPU time.
+</para>
+
+<para>
+<menuchoice><guimenu>Suspend</guimenu></menuchoice>/<menuchoice><guimenu>Resume</guimenu></menuchoice> 
+stores the VM onto disk and recovers it later. This is faster 
+than stop/start and the VM returns to the status is was when the suspend was 
+performed as opposed to a new boot cycle.
+</para>
+
+</section>
+
+<section id="Contextualisation">
+<title>Contextualisation</title>
+
+<para>
+Contextualisation is the process to configure a virtual machine after it has been 
+installed. Typical examples would be to create additional users, install software 
+packages or call a configuration management system. These steps can be used to 
+take a reference image and customise it further. Contextualisation is only run 
+once when the VM is created.
+</para>
+
+<para>
+The public images provided in the CloudVeneto include a contextualisation 
+feature using the open source <literal>cloud-init</literal> package.
+</para>
+
+<para>
+With cloud-init, data to be used for contextualisation are called 
+<literal>user data</literal>.
+
+</para>
+
+<para>
+Using the Openstack command line tool, the <literal>--user_data</literal>
+option of the <command>nova boot</command> command must be used, e.g.:
+
+<screen>
+nova boot my_vm --image "SL65-Padova-x86_64-20141023-QCOW2" \
+  --flavor m1.xsmall --user_data my_data.txt --key_name my_key
+</screen>
+</para>
+
+
+<para>
+For example to run a command during contextualisation, the <literal>#cloud-config</literal> directive
+can be used:
+
+<screen>
+cat > cern-config-users.txt &lt;&lt; EOF
+#cloud-config
+runcmd:
+ - [ /usr/bin/yum, "install", -y, "cern-config-users" ]
+ - [ /usr/sbin/cern-config-users, --setup-all ]
+EOF
+</screen>
+
+</para>
+
+<para>
+User data can be provided as a gzip file if needed where the user data is larger than 16384 bytes, 
+e.g.:
+
+<screen>
+cat > userdata4zip.txt &lt;&lt;EOF
+#!/bin/sh
+wget -O /tmp/geolist.txt http://frontier.cern.ch/geolist.txt
+EOF
+gzip -c userdata4zip.txt > userdata4zip.gz
+
+nova boot my_server --image "SL65-Padova-x86_64-20141023-QCOW2" \
+  --flavor m1.xsmall --user_data userdata4zip.gz --key_name my_key
+</screen>
+
+</para>
+
+<para>
+With the <literal>#include</literal> or <literal>Content-Type: text/x-include-url</literal>
+directives, it is possible to specify a list of URLs, one url per line. The userdata passed by the 
+urls can be plain txt, gzip file or mime-multi-part script. E.g.:
+
+<screen>
+cat userdata.txt &lt;&lt;EOF
+#! /bin/bash
+wget -O /tmp/robots.txt http://www.ubuntu.com/robots.txt
+EOF
+
+cat > userdata4include.txt &lt;&lt;EOF
+#include
+# entries are one url per line. comment lines beginning with '#' are allowed
+# urls are passed to urllib.urlopen, so the format must be supported there
+http://frontier.cern.ch/userdata.txt
+EOF
+</screen>
+
+</para>
+
+<para>
+cloud-init supply also a method called "multiple part" to supply user data in multiple ways, 
+which means you can use userdata script and cloud-config (or other methods recognized by cloud-init) 
+at the same time. cloud-init provides a script 
+(<literal>write-mime-multipart</literal>) to generate a final userdata 
+file. Here is an example:
+
+<screen>
+cat > userdata4script &lt;&lt;EOF
+#! /bin/bash
+mkdir -p /tmp/rdu
+echo "Hello World!" > helloworld.txt
+EOF
+ 
+cat userdata4config
+#cloud-config
+runcmd:
+ - [ wget, "http://slashdot.org", -O, /tmp/index.html ]
+ 
+cat userdata4include
+#include
+# entries are one url per line. comment lines beginning with '#' are allowed
+# urls are passed to urllib.urlopen, so the format must be supported there
+http://frontier.cern.ch/userdata.txt
+</screen>
+
+
+Then use <command>write-mime-multipart</command> to generate 
+<replaceable>userdata4multi.txt</replaceable> and use it to launch an instance:
+
+<screen>
+write-mime-multipart -o userdata4multi.txt userdata4script userdata4config userdata4inc
+
+nova boot my_server --image "SL65-Padova-x86_64-20141023-QCOW2" \
+  --flavor m1.xsmall --user_data userdata4multi.txt --key_name my_key
+</screen>
+
+
+</para>
+
+
+<para>
+On Internet a lot of documentation (along with examples) is available on
+cloud-init, such as in the <ulink url="https://help.ubuntu.com/community/CloudInit">Ubuntu 
+Documentation</ulink>.
+</para>
+
+
+</section>
+
+<section id="ResizingVMs">
+<title>Resizing Virtual Machines</title>
+
+<para>
+If the size of a virtual machine needs to be changed, such as adding more 
+memory or cores, this can be done using the resize operations. Using resize, 
+you can select a new flavor for your virtual machine. The operation will 
+reboot the virtual machine and might take several minutes, so this 
+operation should be planned as it will lead to application downtime.
+</para>
+
+<para>
+To resize a VM using the graphical Interface:
+</para>
+
+<para>
+<itemizedlist>
+<listitem><para>
+Detach any attached volume as decribed in <xref linkend="DetachVolume"/>
+</para>
+<warning><para>
+Failure in doing so might lead to VM and/or Volume corruption!
+</para></warning>
+</listitem>
+
+<listitem><para>Select the <menuchoice><guimenu>Compute</guimenu><guisubmenu>Instances</guisubmenu></menuchoice> 
+menu and then <menuchoice><guimenu>Resize Instance</guimenu></menuchoice> 
+option on the actions.
+</para></listitem>
+
+<listitem><para>
+In the <menuchoice><guimenu>Resize Instance</guimenu></menuchoice> box select
+the desired flavor.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/resize.png" />
+  <imagedata condition="pdf" fileref="./images/resize.png" scale="50" />
+</imageobject>
+</mediaobject>
+
+</para></listitem>
+
+
+<listitem><para>After the new flavor has been selected, the status will 
+become 'resize' or 'migrating'.</para></listitem>
+
+<listitem><para>The status will change after several minutes to 'Confirm' or 
+'Revert Resize/Migrate'. You may need to refresh the web browser page to 
+reflect the new status.
+
+<mediaobject>
+<imageobject>
+  <imagedata fileref="./images/confirm_resize.png" />
+</imageobject>
+</mediaobject>
+
+</para></listitem>
+
+<listitem><para>Select 
+<menuchoice><guimenu>Confirm Resize/Migrate</guimenu></menuchoice> 
+if you wish to change the instance to the new configuration.
+</para></listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+The status will then change to 'Active' once completed.
+</para>
+
+</section>
+
+
+<section id="SnapshottingVMs">
+<title>Snapshotting Virtual Machines</title>
+
+<para>
+It is possible to create a new instance from a previously saved snapshot of a VM.
+</para>
+
+<para>
+The new instance can also have a different flavor from the source VM (but not smaller
+disk size!). It is therefore suggested to use 
+the smallest (in terms of disk size) possible flavor for the source VM.
+</para>
+<!--  (for SL6.x related images this is <literal>cloudareapd.xsmall</literal>). -->
+
+<para>
+Before creating a snapshot you need to "clean up" the network configurations of 
+the “source” VM. For a RedHat based OS (CentOS, Fedora, ...) this can be done using 
+the following instructions, once logged as root on the “source” VM:
+</para>
+
+<screen>
+/bin/rm /etc/udev/rules.d/70-persistent-net.rules
+/bin/rm /lib/udev/write_net_rules
+</screen>
+
+<para>
+To save a snapshot of your VM:
+</para>
+
+<itemizedlist>
+<listitem>
+	<para><literal>Shutdown your VM:</literal>
+	Log in as root to your VM. Please DO NOT shutdown the VM from the Openstack dashboard
+    to make sure all data are correctly flushed on disk;
+	</para>
+</listitem>
+<listitem>
+	<para>
+    Issue the <command>shutdown -h now</command> or <command>poweroff</command> command;
+    </para>
+</listitem>
+<listitem>
+	<para>
+	From the <menuchoice><guimenu>Compute</guimenu><guisubmenu>Instances</guisubmenu></menuchoice>
+    table select the desired VM and click <menuchoice><guimenu>Create Snapshot</guimenu></menuchoice>
+    </para>
+</listitem>
+</itemizedlist>
+
+<!-- warning><para>
+In the production Cloud it is possible to save in the Image service
+only snapshots with a maximum size of 25 GB. 
+</para></warning  -->
+
+
+</section>
+
+
+<section id="DeletingVMs">
+<title>Deleting Virtual Machines</title>
+
+<para>
+VMs can be deleted using the <menuchoice><guimenu>Terminate Instance</guimenu></menuchoice> 
+option in the OpenStack dashboard.
+</para>
+
+<warning><para>
+This command will immediately terminate the instance, delete all content of the 
+virtual machine and erase the ephemeral disk. This operation is not 
+recoverable.
+</para></warning>
+
+</section>
+
+</chapter>
+

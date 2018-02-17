@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="ManagingStorage">
+<title>Managing Storage</title>
+
+<para>
+There are several ways of handling disk storage in the CloudVeneto:
+</para>
+
+<para>
+
+<itemizedlist>
+
+<listitem><para>
+<literal>Ephemeral storage</literal> exists only for the life of a virtual machine 
+instance. It 
+will persist across reboots of the guest operating system but when the 
+instance is deleted so is the associated storage. The size of the ephemeral 
+storage is defined in the virtual machine flavor.
+</para></listitem>
+
+<listitem><para>
+<literal>Volumes</literal> are persistent virtualized block devices independent of any 
+particular instance. Volumes may be attached to a single instance at a time, 
+but may be detached or re-attached to a different instance while retaining 
+all data, much like a USB drive. The size of the volume can be selected when 
+it is created within the quota limits for the particular project.
+</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<section id="EphemeralStorage">
+<title>Ephemeral storage</title>
+
+<para>
+Ephemeral storage exists only for the life of a virtual machine instance. 
+It will persist across reboots of the guest operating system but when the 
+instance is deleted so is the associated storage. The size of the ephemeral 
+storage is defined in the virtual machine flavor.
+</para>
+
+<para>
+Among the flavor details (that are listed in the Dashboard when a VM has to 
+be launched or can be seen using the <command>nova flavor-list</command> 
+command), there is an attribute called 'Ephemeral'. When you use a flavor 
+with an ephemeral disk size different from zero, the instance is booted with 
+an extra virtual disk whose size is indicated by the ephemeral value. 
+This ephemeral disk can be useful where you want to partition the second disk 
+or have a specific disk configuration which is not possible within the system 
+disk configuration.
+</para>
+
+<warning><para>
+Please note that backups are not performed on ephemeral storage systems.
+</para></warning>
+</section>
+
+<section id="Volumes">
+<title>Volumes</title>
+
+<para>
+Volumes are persistent virtualized block devices independent of any 
+particular instance. Volumes may be attached to a single instance at a time 
+(i.e. not like a distributed filesystem such as Lustre or Gluster), but they 
+may be detached or re-attached to a different instance while retaining all 
+data, much like a USB drive.
+</para>
+
+<section id="CreateVolumes">
+<title>Create a Volume</title>
+<para>
+The steps to add a Volume are:
+</para>
+
+<para>
+Using the Dashboard, click on 
+<menuchoice><guimenu>Compute</guimenu><guisubmenu>Volumes</guisubmenu></menuchoice> and then 
+<menuchoice><guimenu>Create Volume</guimenu></menuchoice>. 
+In the "Create Volume” window specify the name of the volume 
+(<replaceable>testvol</replaceable> in the example below) and the desired 
+size (<replaceable>12 GB</replaceable> in the example).
+As <menuchoice><guimenu>Volume Source</guimenu></menuchoice> specify “No source, empty volume”. 
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/testvolCreation.jpg" />
+  <imagedata condition="pdf" fileref="./images/testvolCreation.jpg" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+</section>
+
+<section id="AttachVolume">
+<title>Using (attaching) a Volume</title>
+<para>
+The new defined volume will appear in the 
+<menuchoice><guimenu>Volumes</guimenu></menuchoice> tab. 
+</para>
+
+<para>
+To attach this volume to an 
+existing instance, click on 
+<menuchoice><guimenu>More</guimenu><guisubmenu>Edit attachments</guisubmenu></menuchoice> ... 
+
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/AttachVolumeToInstance.jpg" />
+  <imagedata condition="pdf" fileref="./images/AttachVolumeToInstance.jpg" width="450" />
+</imageobject>
+</mediaobject>
+
+... select the relevant Virtual Machine...
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/AttachVolumeToInstance1.jpg" />
+  <imagedata condition="pdf" fileref="./images/AttachVolumeToInstance1.jpg" width="450" />
+</imageobject>
+</mediaobject>
+
+...and click on "Attach Volume".
+</para>
+
+<para id="CreateFS">
+Log in to the instance and check if the disk has been added:
+</para>
+
+<screen>
+grep vdb /proc/partitions
+ 253       16   12582912 vdb
+</screen>
+
+<para>
+If needed, create a file system on it (this will scratch the disk!):
+</para>
+
+<screen>
+mkfs -t ext4 /dev/vdb
+</screen>
+
+<para>
+Mount the volume:
+</para>
+
+<screen>
+mount /dev/vdb /mnt
+</screen>
+</section>
+
+<section id="DetachVolume">
+<title>Detaching a Volume</title>
+<para>
+To detach a volume from an instance, first of all log into the virtual 
+machine that has the volume mounted, and unmount it:
+</para>
+
+<screen>
+umount /mnt
+</screen>
+
+<para>
+Then, using the Dashboard, click on 
+<menuchoice><guimenu>Volumes</guimenu></menuchoice>, click on 
+<menuchoice><guimenu>More</guimenu><guisubmenu>Edit attachments</guisubmenu></menuchoice> for the relevant 
+volume and select <menuchoice><guimenu>Detach Volume</guimenu></menuchoice>. 
+The detached volume can then be associated to another VM, as described above 
+(you won't have to re-create the file system, otherwise you will lose the 
+content of the volume!)
+</para>
+</section>
+
+<section id="DeleteVolume">
+<title>Deleting a Volume</title>
+<para>
+If a volume is not needed any longer, to completely remove it (note that 
+this step cannot be reverted!):
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+if needed, detach the volume from the associated instance
+</para></listitem>
+
+
+<listitem><para>
+using the Dashboard, click on 
+<menuchoice><guimenu>Compute</guimenu><guisubmenu>Volumes</guisubmenu></menuchoice>, select the relevant 
+volume and then select 
+<menuchoice><guimenu>Delete Volumes</guimenu></menuchoice>
+</para></listitem>
+
+</itemizedlist>
+
+
+<warning><para>
+Please note that backups are not performed on volumes.
+</para></warning>
+</section>
+
+<section id="SharingVolume">
+<title>Sharing a volume between multiple (virtual) machines </title>
+
+<para>
+As discussed in <xref linkend="Volumes"/>, a volume may be attached to a 
+single instance. However it can be shared with other virtual machines of the 
+Cloud (and/or with other hosts) using NFS.
+</para>
+
+<orderedlist>
+<listitem>
+	<para><literal>Configure NFS server</literal></para>
+	<orderedlist>
+		<listitem>
+			<para>
+			Once a volume has been created, formatted and attached to this instance
+			(see <xref linkend="Volumes"/> for details) acting as NFS server, create the mount point and mount the 
+			volume on this virtual machine:
+<screen>
+mkdir /dataNfs
+mount /dev/sdb /dataNfs
+</screen>
+			</para>
+		</listitem>
+
+		<listitem>
+			<para>
+			Ensure that on this virtual machine the packages providing the <command>rpc.nfsd</command> daemon are installed:
+<screen>
+# yum whatprovides "*/rpc.nfsd"
+
+Loaded plugins: dellsysid, fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: centos.fastbull.org
+ * epel: mirror.23media.de
+ * extras: centos.fastbull.org
+ * updates: fr2.rpmfind.net
+1:nfs-utils-1.3.0-0.8.el7.x86_64 : NFS utilities and supporting clients and daemons for the kernel NFS server
+Repo        : base
+Matched from:
+Filename    : /usr/sbin/rpc.nfsd
+
+
+
+1:nfs-utils-1.3.0-0.8.el7.x86_64 : NFS utilities and supporting clients and daemons for the kernel NFS server
+Repo        : @base
+Matched from:
+Filename    : /usr/sbin/rpc.nfsd
+
+# yum install nfs-utils
+</screen>
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+			Insert the correct export directive in the /etc/exports file. For example 
+			if the volume must be visible to 
+			all the virtual machines of the same subnet 10.67.1.* (check the subnet with 
+			the <command>ifconfig</command> command) the content of the /etc/exports file 
+			will be:
+<screen>
+/dataNfs 10.67.1.*(async,rw,no_root_squash)
+</screen>
+            Note that there are no spaces between the '*' and the '('.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+			Check the firewall on the virtual machine. Ensure that the other instances
+			have both UDP and TCP access to ports 111, 2049 and 875:</para>
+			<itemizedlist> <!-- iptables/firewalld -->
+				<listitem>
+				<para>
+				For newer distributions using <command>firewalld</command> issue the following
+				commands:
+<screen>
+firewall-cmd --add-service=nfs
+firewall-cmd --permanent --add-service=nfs
+</screen>
+				</para>
+				</listitem>
+				<listitem>
+				<para>
+				For older distributions using iptables, the /etc/sysconfig/iptables file should be 
+				something like this:
+<screen>
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 111 -j ACCEPT
+-A INPUT -m state --state NEW -m udp -p udp --dport 111 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 875 -j ACCEPT
+-A INPUT -m state --state NEW -m udp -p udp --dport 875 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 2049 -j ACCEPT
+-A INPUT -m state --state NEW -m udp -p udp --dport 2049 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+</screen>
+				</para>
+				<para>
+				Please remember to restart iptables after any change on that file:
+<screen>
+service iptables restart
+</screen>
+				</para>
+				</listitem>
+			</itemizedlist>  <!-- iptables/firewalld -->
+		</listitem>
+		<listitem>
+			<para>
+			Check the security group (see <xref linkend="SecurityGroups"/>): 
+			access to ports 111, 875 and 2049 (IPv4 Ingress both TCP and UDP) should be guaranteed: 
+			<mediaobject>
+			<imageobject>
+  				<imagedata condition="web" fileref="./images/AccessAndSecurity.jpg" />
+  				<imagedata condition="pdf" fileref="./images/AccessAndSecurity.jpg" width="450" />
+			</imageobject>
+			</mediaobject>
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+			Restart nfs server using:
+<screen>
+systemctl restart nfs
+</screen>
+			or
+<screen>
+service nfs restart
+</screen>
+			</para>
+		</listitem>
+	</orderedlist>  <!-- configure NFS server -->
+</listitem>
+
+<listitem>
+	<para><literal>Configure client machine(s)</literal></para>
+	<orderedlist>  <!-- configure client -->
+		<listitem>
+			<para>
+			To mount the volume on the other VMs, check that the 
+			package providing the <command>mount.nfs</command> command is installed:
+			</para>
+<screen>
+# yum whatprovides "*/mount.nfs"
+Loaded plugins: dellsysid, fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: centos.fastbull.org
+ * epel: mirror.23media.de
+ * extras: centos.fastbull.org
+ * updates: fr2.rpmfind.net
+1:nfs-utils-1.3.0-0.8.el7.x86_64 : NFS utilities and supporting clients and daemons for the kernel NFS server
+Repo        : base
+Matched from:
+Filename    : /sbin/mount.nfs
+
+
+
+1:nfs-utils-1.3.0-0.8.el7.x86_64 : NFS utilities and supporting clients and daemons for the kernel NFS server
+Repo        : @base
+Matched from:
+Filename    : /sbin/mount.nfs
+
+# yum install nfs-utils
+</screen>
+		</listitem>
+		<listitem>
+			<para>
+			issue a mount command such as this one (assuming 10.67.1.4 is the NFS server):
+<screen>
+mount -t nfs 10.67.1.4:/dataNfs /mnt
+</screen>
+			</para>
+			<note><para>
+			Please note that this procedure can be used to mount a volume also on hosts
+			outside the Cloud: it is sufficient to specify the IP address of these
+			hosts in the /etc/exports file on the instance acting as NFS server.
+			</para></note>
+		</listitem>
+	</orderedlist> <!-- configure client -->
+</listitem>
+</orderedlist>
+
+</section>
+</section>
+
+
+<section id="AccessingExternalStorage">
+<title>Accessing storage external to the Cloud</title>
+
+<para>
+As explained in <xref linkend="NetworkAccess"/> from an instance of the Cloud
+by default it is not possible to access a host/service hosted in Padova or 
+Legnaro. This also means that by default on a virtual machine of
+the CloudVeneto it is not possible to mount a file system 
+exported from a storage server hosted in Padova or Legnaro.
+</para>
+
+<para>
+Accessing a storage system external to the Cloud from a virtual machine
+in an efficient way require some non negligible effort with respect 
+to network configuration. 
+If however there is such need,
+please contact <email>cedc-support@lists.pd.infn.it</email>.
+</para>
+
+</section>
+
+</chapter>

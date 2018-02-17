@@ -1,0 +1,663 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="MicroHOWTO">
+<title>Some basics on Linux administration</title>
+
+<section>
+<title>Introduction</title>
+
+<para>
+<blockquote>
+<attribution>William Lamb, 2nd Viscount Melbourne</attribution>
+<para>The possession of great power necessarily implies great responsibility.</para>
+</blockquote>
+</para>
+
+<para>
+The <literal>CloudVeneto</literal> provides an infrastructure where your virtual machines can live.
+After you have activated your virtual machine(s) you are on your own for the most part of the day to day 
+administration tasks.
+</para>
+
+<warning><para>
+We will only focus on Linux VMs, showing differences between the RedHat (CentOS, Fedora, ... ) and Debian (Ubuntu, Mint, ... ) distributions.
+</para>
+<para>
+Throughout this chapter we will address the former with RH and the latter with DEB.
+</para>
+</warning>
+
+<para>
+Some of these everyday tasks might be:
+<itemizedlist>
+<listitem><para>Use your VM as root only when needed;</para></listitem>
+<listitem><para>Installing/deinstalling software;</para></listitem>
+<listitem><para>Adding another user to your VM;</para></listitem>
+<listitem><para>Formatting the volume you just attached to your VM;</para></listitem>
+<listitem><para>Automatically remount the volume on next reboot.</para></listitem>
+</itemizedlist>
+In the following sections we provide some very small introductory instructions on performing such tasks.
+</para>
+</section>
+
+<section id="sudo"><title>Setting up 'sudo'</title>
+<para>
+Nobody (not even administrators) use a Unix/Linux system <literal>always</literal> as root.
+</para>
+<para>If you do you should stop immediately (no jokes!).</para>
+<para>
+Normally you have your user with limited privileges and, when needed, you use <literal>su</literal> (which stands for 'switch user') to become root,
+perform the privileged task and then you go back to the normal user.
+</para>
+<para>
+A more flexible approach is using <literal>sudo</literal> (Super User DO) to perform the 'one shot' task or to allow certain users to perform only
+some tasks as the superuser. The configuration of sudo is performed by modifying the <literal>/etc/sudoers</literal> file or (better) by adding a
+file in the <literal>/etc/sudoers.d</literal> directory.
+</para>
+<para>
+Follow these instructions to allow the user <literal>paolo</literal> (change this to your username) to perform any command as the superuser
+providing his own password, or to modify your user privileges (in this case there is already a file with your username in the <literal>/etc/sudoers.d</literal> directory):
+<itemizedlist>
+   <listitem><para>Become the <literal>root</literal> user:
+      <itemizedlist>
+         <listitem><para>RH: using <command>su</command> and providing the root password</para></listitem>
+         <listitem><para>DEB: using <command>sudo su -</command> and providing your password</para></listitem>
+      </itemizedlist>
+      </para>
+   </listitem>
+   <listitem><para>Create the file <literal>/etc/sudoers.d/paolo</literal> using your preferred editor;</para></listitem>
+   <listitem><para>Add this line inside the file:
+      <screen>
+      paolo            ALL = (ALL) ALL 
+      </screen>
+      </para>
+      <para>If you want the user to do everything without even providing the password put this line instead:
+      <screen>
+      paolo            ALL = NOPASSWD: ALL
+      </screen>
+      </para>
+   </listitem>
+   <listitem><para>change the file permissions: <command>chmod 0440 /etc/sudoers.d/paolo</command></para></listitem>
+</itemizedlist>
+</para>
+<para>
+Now when paolo logs in to the VM he is allowed to perform superuser tasks by prefixing the command with <command>sudo</command>.
+</para>
+<para>
+If you want to limit the user to perform only certain commands (or classes of commands, e.g. installing/deinstalling software) you can look at
+the sudo documentation on your VM using <screen>man sudoers</screen>
+</para>
+</section>
+
+<section id="ManagingSoftware"><title>Managing software through the package manager</title>
+<para>
+RedHat and Debian based linux distributions both have their software management system. On RH each software is packaged in <literal>rpm</literal>
+form (RPM stands for RedHat Package Manager) while DEB uses <literal>deb</literal> packages. 
+</para>
+<para>Package contents are not only copied on the VM when installed, but are also listed on a database that can be queried to search for new software,
+to find out which package installed which files and so on. (Note: there is no such functionality on Windows servers...).</para>
+
+<para>Rather than manipulating the packages directly whith the <command>rpm</command> (RH) or <command>dpkg</command> (DEB) commands, you will
+mostly use a command line package manager such as <command>yum</command> or <command>apt</command>.</para>
+<para>We will now try to install the <literal>wget</literal> package on a RH and a DEB system.</para>
+
+<section id="YUM"><title>Managing software on RH distributions</title>
+<para>Let's try to install the wget software on CentOS or Fedora linux.</para>
+<para>We will use <command>yum</command> (<command>dnf</command> on Fedora 21) and <command>rpm</command> for the task.</para>
+<para>Since we will be performing operations as the superuser, if you haven't already, please <link linkend="sudo">set up sudo</link> first.</para>
+<para>
+   <orderedlist>
+      <listitem>
+         <para>Query the system to search for wget (no need to be root for that):</para>
+         <screen>
+[paolo@maz03 ~]$ yum search wget
+Loaded plugins: fastestmirror
+Trying other mirror.
+base                                                     | 3.6 kB     00:00     
+extras                                                   | 3.4 kB     00:00     
+updates                                                  | 3.4 kB     00:00     
+(1/4): base/7/x86_64/group_gz                              | 154 kB   00:00     
+(2/4): extras/7/x86_64/primary_db                          |  87 kB   00:00     
+(3/4): updates/7/x86_64/primary_db                         | 3.9 MB   00:00     
+(4/4): base/7/x86_64/primary_db                            | 5.1 MB   00:01     
+Determining fastest mirrors
+ * base: mi.mirror.garr.it
+ * extras: mi.mirror.garr.it
+ * updates: mi.mirror.garr.it
+============================== N/S matched: wget ===============================
+wget.x86_64 : A utility for retrieving files using the HTTP or FTP protocols
+
+  Name and summary matches only, use "search all" for everything.
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Install the wget package (note that we are using <literal>sudo</literal> here):</para>
+         <screen>
+[paolo@maz03 ~]$ sudo yum install wget
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mi.mirror.garr.it
+ * extras: mi.mirror.garr.it
+ * updates: mi.mirror.garr.it
+Resolving Dependencies
+--> Running transaction check
+---> Package wget.x86_64 0:1.14-10.el7_0.1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package        Arch             Version                   Repository      Size
+================================================================================
+Installing:
+ wget           x86_64           1.14-10.el7_0.1           base           545 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Total download size: 545 k
+Installed size: 2.0 M
+Is this ok [y/d/N]: y
+Downloading packages:
+wget-1.14-10.el7_0.1.x86_64.rpm                            | 545 kB   00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : wget-1.14-10.el7_0.1.x86_64                                  1/1 
+  Verifying  : wget-1.14-10.el7_0.1.x86_64                                  1/1 
+
+Installed:
+  wget.x86_64 0:1.14-10.el7_0.1                                                 
+
+Complete!
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Query the rpm database to see what has been installed:</para>
+         <screen>
+[paolo@maz03 ~]$ rpm -ql wget
+/etc/wgetrc
+/usr/bin/wget
+/usr/share/doc/wget-1.14
+/usr/share/doc/wget-1.14/AUTHORS
+/usr/share/doc/wget-1.14/COPYING
+/usr/share/doc/wget-1.14/MAILING-LIST
+/usr/share/doc/wget-1.14/NEWS
+/usr/share/doc/wget-1.14/README
+/usr/share/doc/wget-1.14/sample.wgetrc
+/usr/share/info/wget.info.gz
+/usr/share/locale/be/LC_MESSAGES/wget.mo
+.....
+.....
+/usr/share/locale/sv/LC_MESSAGES/wget.mo
+/usr/share/locale/tr/LC_MESSAGES/wget.mo
+/usr/share/locale/uk/LC_MESSAGES/wget.mo
+/usr/share/locale/vi/LC_MESSAGES/wget.mo
+/usr/share/locale/zh_CN/LC_MESSAGES/wget.mo
+/usr/share/locale/zh_TW/LC_MESSAGES/wget.mo
+/usr/share/man/man1/wget.1.gz
+         </screen>
+         </listitem>
+      <listitem>
+         <para>You now decide you don't need wget anymore. Remove the package (root needed!):</para>
+         <screen>
+[paolo@maz03 ~]$ sudo yum remove wget
+Loaded plugins: fastestmirror
+Resolving Dependencies
+--> Running transaction check
+---> Package wget.x86_64 0:1.14-10.el7_0.1 will be erased
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+ Package       Arch            Version                     Repository      Size
+================================================================================
+Removing:
+ wget          x86_64          1.14-10.el7_0.1             @base          2.0 M
+
+Transaction Summary
+================================================================================
+Remove  1 Package
+
+Installed size: 2.0 M
+Is this ok [y/N]: y
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Erasing    : wget-1.14-10.el7_0.1.x86_64                                  1/1 
+  Verifying  : wget-1.14-10.el7_0.1.x86_64                                  1/1 
+
+Removed:
+  wget.x86_64 0:1.14-10.el7_0.1                                                 
+
+Complete!
+         </screen>
+         </listitem>
+   </orderedlist>
+</para>
+</section>
+
+<section id="DEB"><title>Managing software on DEB distributions</title>
+<para>Let's try to install the wget software on Debian or Ubuntu linux.</para>
+<para>We will use <command>apt</command> and <command>dpkg</command> for the task.</para>
+<para>Since we will be performing operations as the superuser, if you haven't already, please <link linkend="sudo">set up sudo</link> first.</para>
+<para>
+   <orderedlist>
+      <listitem>
+         <para>Update your local cache of available softwares (superuser privileges needed):</para>
+         <screen>
+ubuntu@maz03:~$ sudo apt-get update
+sudo: unable to resolve host maz03
+Ign http://nova.clouds.archive.ubuntu.com trusty InRelease
+Ign http://nova.clouds.archive.ubuntu.com trusty-updates InRelease
+Hit http://nova.clouds.archive.ubuntu.com trusty Release.gpg
+Get:1 http://nova.clouds.archive.ubuntu.com trusty-updates Release.gpg [933 B]
+Hit http://nova.clouds.archive.ubuntu.com trusty Release
+Ign http://security.ubuntu.com trusty-security InRelease
+.....
+.....
+Fetched 10.2 MB in 3s (3257 kB/s)                                              
+Reading package lists... Done
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Query the cache for wget (no privileges needed).</para>
+         <para>Note that DEB systems also query descriptions and 'related' softwares.</para>
+         <screen>
+ubuntu@maz03:~$ apt-cache search wget
+devscripts - scripts to make the life of a Debian Package maintainer easier
+texlive-latex-extra - TeX Live: LaTeX additional packages
+wget - retrieves files from the web
+abcde - A Better CD Encoder
+apt-mirror - APT sources mirroring tool
+apt-zip - Update a non-networked computer using apt and removable media
+axel - light download accelerator - console version
+axel-dbg - light download accelerator - debugging symbols
+axel-kapt - light download accelerator - graphical front-end
+filetea - Web-based file sharing system
+getdata - management of external databases
+libcupt3-0-downloadmethod-wget - alternative front-end for dpkg -- wget download method
+puf - Parallel URL fetcher
+pwget - downloader utility which resembles wget (implemented in Perl)
+snarf - A command-line URL grabber
+wput - tiny wget-like ftp-client for uploading files
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Install wget as the superuser:</para>
+         <screen>
+ubuntu@maz03:~$ sudo apt-get install wget
+sudo: unable to resolve host maz03
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+  wget
+0 upgraded, 1 newly installed, 0 to remove and 25 not upgraded.
+Need to get 269 kB of archives.
+After this operation, 651 kB of additional disk space will be used.
+Get:1 http://nova.clouds.archive.ubuntu.com/ubuntu/ trusty-updates/main wget amd64 1.15-1ubuntu1.14.04.1 [269 kB]
+Fetched 269 kB in 0s (1218 kB/s)
+Selecting previously unselected package wget.
+(Reading database ... 51118 files and directories currently installed.)
+Preparing to unpack .../wget_1.15-1ubuntu1.14.04.1_amd64.deb ...
+Unpacking wget (1.15-1ubuntu1.14.04.1) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Processing triggers for install-info (5.2.0.dfsg.1-2) ...
+Setting up wget (1.15-1ubuntu1.14.04.1) ...
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Query the deb database and see what files have been installed by wget:</para>
+         <screen>
+ubuntu@maz03:~$ dpkg -L wget
+/.
+/usr
+/usr/bin
+/usr/bin/wget
+/usr/share
+/usr/share/man
+/usr/share/man/man1
+/usr/share/man/man1/wget.1.gz
+/usr/share/info
+/usr/share/info/wget.info.gz
+/usr/share/doc
+/usr/share/doc/wget
+/usr/share/doc/wget/copyright
+/usr/share/doc/wget/AUTHORS
+/usr/share/doc/wget/NEWS.gz
+/usr/share/doc/wget/MAILING-LIST
+/usr/share/doc/wget/README
+/usr/share/doc/wget/changelog.Debian.gz
+/etc
+/etc/wgetrc
+         </screen>
+         </listitem>
+      <listitem>
+         <para>You now decide you don't need wget anymore. Remove the wget software from the system (keep config files).</para>
+         <para>Note: you can alternatively 'purge' the software completely as described in the <link linkend="purge">'purge'</link> section.</para>
+         <screen>
+ubuntu@maz03:~$ sudo apt-get remove wget
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+  wget
+0 upgraded, 0 newly installed, 1 to remove and 25 not upgraded.
+After this operation, 651 kB disk space will be freed.
+Do you want to continue? [Y/n] Y
+(Reading database ... 51129 files and directories currently installed.)
+Removing wget (1.15-1ubuntu1.14.04.1) ...
+Processing triggers for install-info (5.2.0.dfsg.1-2) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+         </screen>
+         </listitem>
+      <listitem>
+         <para>Discover which files have been left behind by the wget software:</para>
+         <screen>
+ubuntu@maz03:~$ dpkg -L wget
+/etc
+/etc/wgetrc
+         </screen>
+         </listitem>
+      <listitem id="purge">
+         <para>Completely remove (purge) all the files installed by wget:</para>
+         <screen>
+ubuntu@maz03:~$ sudo apt-get purge wget
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be REMOVED:
+  wget*
+0 upgraded, 0 newly installed, 1 to remove and 25 not upgraded.
+After this operation, 0 B of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+(Reading database ... 51119 files and directories currently installed.)
+Removing wget (1.15-1ubuntu1.14.04.1) ...
+Purging configuration files for wget (1.15-1ubuntu1.14.04.1) ...
+         </screen>
+         </listitem>
+   </orderedlist>
+</para>
+</section>
+</section>
+
+<section><title>Adding a user to your VM</title>
+<para>You may need to give access to your VM to another user. Given that 
+there are no graphical tools or fancy icons to do the task you are going to user 
+some command line tools.
+</para>
+<para>We are going to add the user 'pemazzon' (Paolo E. Mazzon) to your system.</para>
+<orderedlist>
+      <listitem>
+         <screen>
+$ sudo useradd -m -c 'Paolo E. Mazzon' pemazzon
+         </screen>
+         <para>The meaning of parameters is:
+            <itemizedlist>
+               <listitem><para><literal>-m</literal> = create a 'home directory' for the user under /home</para></listitem>
+               <listitem><para><literal>-c</literal> = set this as a description of the user</para></listitem>
+            </itemizedlist>
+         </para>
+         </listitem>
+      <listitem>
+         <warning>
+            <para>It may be necessary to enable password authentications through ssh.
+                  Check the file <literal>/etc/ssh/sshd_config</literal> and be sure that you have</para>
+                  <para><literal>ChallengeResponseAuthentication yes</literal></para><para> inside. If you
+                  modified that file restart the ssh service using</para>
+                  <para>DEB systems: <literal>sudo restart ssh</literal></para><para>or</para>
+                  <para>RH systems: <literal>sudo systemctl restart sshd</literal></para>
+         </warning>
+         </listitem>
+      <listitem>
+          <para>Set a password for the user: you will decide a password that will be valid just
+                for the first login. You will force the user to change it immediately.</para>
+              <screen>
+$ sudo passwd pemazzon
+
+... enter twice times the
+    password you want to
+    set for the user ...
+              </screen>
+            </listitem>
+      <listitem>
+         <para>Force the user to change his password on first logon:
+         <screen>
+$ sudo chage -d 0 pemazzon
+         </screen>
+         </para>
+         </listitem>
+      <listitem>
+         <para>Mail the user the password you have set.</para>
+         </listitem>
+</orderedlist>
+</section>
+
+<section><title>Formatting/resizing a volume you just attached</title>
+<para>We already show on <xref linkend='CreateFS'/> how to start 
+using a volume you have attached to your VM.
+We will give you here some more details.</para>
+<para>If you just created an empty volume you first need to create a filesystem on it before you can put some
+data inside. The volume you just attached is merely 'raw space' and has no concept about files and directories.</para>
+<para>You may also think about partitioning your volume, e.g. to split volume
+space in 'slices', as you may have done installing linux.</para>
+<para>Given that in the CloudVeneto you can add as many volumes you want (up to your volume quota, of course)
+partitioning a volume is simply <literal>not recommended</literal>.</para>
+<para>Suppose now that you have filled the volume space. You have the option to resize it from the cloud dashboard but
+the result may not be the one you expect until you do some operations from inside your VM.</para>
+<para>We are going to resize the volume 'test' from 2 to 4 GB and use the newly available space on a VM.</para>
+<para>We will create the volume from scratch. Obviously you can jump to step <xref linkend='ResizeVolume'/> if you are resizing an
+existing volume.</para>
+<para>
+<orderedlist>
+   <listitem>
+      <para>Create a 2 GB volume named 'test' and attach it to one of your VM as described in <xref linkend='Volumes'/></para>
+      </listitem>
+   <listitem>
+      <para>Create a filesystem and mount it as described in <xref linkend='CreateFS'/></para>
+      </listitem>
+   <listitem>
+      <para>Check the available space is 2 GB and the filesystem is filling up the partition
+         <screen>
+ubuntu@maz03:~$ sudo fdisk -l /dev/vdb
+
+Disk /dev/vdb: 2154 MB, 2154823680 bytes
+15 heads, 30 sectors/track, 9352 cylinders, total 4208640 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+Disk /dev/vdb doesn't contain a valid partition table
+
+ubuntu@maz03:~$ df -k /mnt
+Filesystem     1K-blocks  Used Available Use% Mounted on
+/dev/vdb         2005688  3096   1880992   1% /mnt
+         </screen>
+      </para>
+      </listitem>
+</orderedlist>
+</para>
+<para id='ResizeVolume'>Let's resize the volume</para>
+<orderedlist>
+   <listitem>
+      <para>Umount it first from the VM (if mounted):
+      <screen>
+ubuntu@maz03:~$ sudo umount /dev/vdb
+      </screen>
+      </para>
+      </listitem>
+   <listitem>
+      <para>Detach it from the VM using the dashboard: use "Edit Attachments" and confirm your request.
+      <mediaobject>
+      <imageobject>
+        <imagedata condition="web" fileref="./images/detach_test.png" />
+        <imagedata condition="pdf" fileref="./images/detach_test.png" width="450" />
+      </imageobject>
+      </mediaobject>
+      </para>
+      </listitem>
+   <listitem>
+      <para>When the volume is detached the "Extend Volume" option will be available. Select it...
+      <mediaobject>
+      <imageobject>
+        <imagedata condition="web" fileref="./images/resize_test.png" />
+        <imagedata condition="pdf" fileref="./images/resize_test.png" width="450" />
+      </imageobject>
+      </mediaobject>
+      </para>
+      </listitem>
+   <listitem>
+      <para>... and grow the volume to, say, 4GB:
+      <mediaobject>
+      <imageobject>
+        <imagedata condition="web" fileref="./images/resize_to_4GB_test.png" />
+        <imagedata condition="pdf" fileref="./images/resize_to_4GB_test.png" width="450" />
+      </imageobject>
+      </mediaobject>
+      </para>
+      </listitem>
+   <listitem>
+      <para>Now attach again the volume to the VM and let's check, from inside the VM, what's happening:
+      <screen>
+ubuntu@maz03:~$ sudo mount /dev/vdb /mnt
+ubuntu@maz03:~$ sudo fdisk -l /dev/vdb
+
+Disk /dev/vdb: 4309 MB, 4309647360 bytes
+16 heads, 63 sectors/track, 8350 cylinders, total 8417280 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+Disk /dev/vdb doesn't contain a valid partition table
+      </screen>
+      The disk size is now 4309 MB, so the system recognize the fact that the volume have grown.
+      </para>
+      <para>
+      Let's check the available space:
+      <screen>
+ubuntu@maz03:~$ df -k /mnt
+Filesystem     1K-blocks  Used Available Use% Mounted on
+/dev/vdb         2005688  3096   1880992   1% /mnt
+      </screen>
+      we see here that it is <literal>still 2 GB!</literal>. This is due to the fact that the filesystem
+      has not been touched by the resize operation: the volume service of the cloud has no knowledge of
+      what's inside your volume.</para>
+      <para>To use the new space we need to resize the filesystem, obviously from inside the VM, to let it
+      span all the volume:
+      <screen>
+ubuntu@maz03:~$ sudo umount /mnt
+ubuntu@maz03:~$ sudo resize2fs /dev/vdb
+resize2fs 1.42.9 (4-Feb-2014)
+old_desc_blocks = 1, new_desc_blocks = 1
+The filesystem on /dev/vdb is now 1052160 blocks long.
+
+ubuntu@maz03:~$ sudo mount /dev/vdb /mnt
+ubuntu@maz03:~$ df -k /mnt
+Filesystem     1K-blocks  Used Available Use% Mounted on
+/dev/vdb         4078888  4120   3873956   1% /mnt
+      </screen>
+      You can now see you have all the 4 GB available.
+      </para>
+      </listitem>
+</orderedlist>
+</section>
+
+<section><title>Automatically remount volumes on reboot</title>
+<para>Connecting a volume to your VM using the 'mount' command is a one-shot solution. If you need to reboot your VM
+for some reason you will have to re-issue the command again.</para>
+<para>Forget to do so might cause the following:
+<orderedlist>
+      <listitem>
+         <para>You write data under the /mnt directory (or wherever you mount your volume) thinking you are writing on your volume with, say, 1 TB of space;</para>
+         </listitem>
+      <listitem>
+         <para>The volume is not mounted there so you are writing instead on the same space where your operating system lives;</para>
+         </listitem>
+      <listitem>
+         <para>You eventually fill up your filesystem and your VM crash/starts malfunctioning;</para>
+         </listitem>
+      <listitem>
+         <para>Your VM might not boot anymore and you have to call for help.</para>
+         </listitem>
+</orderedlist>
+</para>
+<para>We will now create an entry on the <literal>/etc/fstab</literal> file to remount the volume (the volumes?) upon reboot.</para>
+<warning>
+<para>A big warning! DO NOT edit the /etc/fstab file by transferring it on a windows machine and then back to your VM. Bad things will happen...</para>
+</warning>
+<para>
+The /mnt directory is normally used as the 'mount point' for various devices. Normally you would create a directory under /mnt for each device and 
+attach the device on that directory. Obviously this is not mandatory: you can mount filesystems almost everywhere (e.g. /data, /opt/myprograms and so on.)</para>
+<para>All the operations will be performed as the supersuser.</para>
+<orderedlist>
+      <listitem>
+         <para>Acquire root privileges
+         <screen>
+ubuntu@maz03:~$ sudo su -
+root@maz03:~#
+         </screen>
+         </para>
+         </listitem>
+      <listitem>
+         <para>Create the 'mount point'
+         <screen>
+root@maz03:~# mkdir -p /mnt/volume1
+         </screen>
+         </para>
+         </listitem>
+      <listitem>
+         <para>Edit the /etc/fstab file: we will use the 'nano' editor for that:
+         <screen>
+root@maz03:~# nano /etc/fstab
+         </screen>
+         Your screen should look like this one:
+         <mediaobject>
+         <imageobject>
+           <imagedata condition="web" fileref="./images/edit_fstab.png" />
+           <imagedata condition="pdf" fileref="./images/edit_fstab.png" width="450" />
+         </imageobject>
+         </mediaobject>
+         </para>
+         </listitem>
+      <listitem>
+         <para>Add a line telling you want to mount the device /dev/vdb under /mnt/volume1 (you have already created an ext4 filesystem on it).</para>
+         <para>This should be the content of your file:
+         <mediaobject>
+         <imageobject>
+           <imagedata condition="web" fileref="./images/add_vol1_to_fstab.png" />
+           <imagedata condition="pdf" fileref="./images/add_vol1_to_fstab.png" width="450" />
+         </imageobject>
+         </mediaobject>
+         </para>
+         </listitem>
+      <listitem>
+         <para>Write your file to disk by pressing <literal>CTRL+o</literal> ... 
+         <mediaobject>
+         <imageobject>
+           <imagedata condition="web" fileref="./images/write_fstab.png" />
+           <imagedata condition="pdf" fileref="./images/write_fstab.png" width="450" />
+         </imageobject>
+         </mediaobject>
+         ... and confirming with enter.</para>
+         </listitem>
+      <listitem>
+         <para>Exit the editor by pressing <literal>CTRL+x</literal>. Go back to your normal user by issuing the 'exit' command or by pressing CTRL+d</para>
+         </listitem>
+</orderedlist>
+<para>Now your volume will appear under the '/mnt/volume1' directory everytime your VM boots up. You can also mount the volume just issuing
+<screen>sudo mount /mnt/volume1</screen>
+The system will lookup in /etc/fstab and mount the correct volume corresponding to the /mnt/volume1 mount point.</para>
+</section>
+
+</chapter>

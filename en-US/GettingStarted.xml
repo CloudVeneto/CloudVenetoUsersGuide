@@ -1,0 +1,550 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="GettingStarted">
+<title>Getting Started</title>
+
+
+<section id="AccessTheCloudThroughTheDashboard">
+<title>Access the Cloud through the Dashboard</title>
+<para>
+Once you have been given an account, you can access the functionality 
+provided by the Cloud.
+There are several ways of interacting with the Cloud. The simplest one is the 
+dashboard, a web based GUI.
+</para>
+
+
+
+<para>
+To access the production service of the CloudVeneto via the 
+dashboard, you must simply go 
+to  <ulink url="https://cloud.cedc.csia.unipd.it/dashboard/">https://cloud.cedc.csia.unipd.it/dashboard/</ulink> in a browser.
+</para>
+
+
+
+<mediaobject>
+<imageobject>
+  <imagedata fileref="./images/dashboard_prod.png" />
+</imageobject>
+</mediaobject>
+
+<para>
+You can now log either using the INFN-AAI credentials, or 
+using the username and password.
+</para>
+
+
+<warning><para>
+Authentication through <literal>IDEM</literal> (the Italian identity
+federation of universities and research institutes for authentication and
+authorization) is being setup and therefore the relevant icon might appear
+in the Dashboard. However this is not yet operational.                          </para></warning>
+
+
+</section>
+
+
+<section id="CreatingAKeypair">
+<title>Creating a keypair</title>
+<para>
+You can now proceed to creating a key-pair. This is a secret key which will 
+allow you to interact with your virtual machine once it is created. This key 
+should be handled with similar security to a password or an ssh key so it 
+should only be stored in a secure directory such as a private area in your 
+home folder.
+</para>
+<para>
+The steps are as follows:
+</para>
+<itemizedlist>
+<listitem><para>Open the <menuchoice><guimenu>Compute
+</guimenu></menuchoice> tab on the left side</para></listitem>
+
+<listitem><para>Select <menuchoice><guimenu>Access &amp; Security
+</guimenu></menuchoice></para></listitem>
+
+<listitem><para>In the <menuchoice><guimenu>Key Pairs</guimenu></menuchoice> 
+section, select <menuchoice><guimenu>Create Key Pair</guimenu></menuchoice>. 
+</para></listitem>
+</itemizedlist>
+<para>
+You will need to give the keypair a name, such as 
+<replaceable>my_key</replaceable>.</para>
+
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/create_keypair.png" />
+  <imagedata condition="pdf" fileref="./images/create_keypair.png" width="450" />
+</imageobject>
+</mediaobject>
+
+<para>
+On completion of the operation, a file <replaceable>my_key.pem</replaceable> will be downloaded to your computer.
+</para>
+
+<warning><para>
+Be careful not to lose the file you just downloaded since there is no easy way to download it again.
+</para></warning>
+
+<para>
+This file should be stored in a safe location.  To keep it private, run:
+<command>
+chmod 600 <replaceable>my_key.pem</replaceable>
+</command>
+</para>
+
+</section>
+
+<section id="ImportingAKeypair">
+<title>Importing your keypair</title>
+<para>
+You might already have an ssh key you use to remotely access machines. This
+mean you already have under the <replaceable>.ssh</replaceable> directory in
+your home folder a couple of files named <replaceable>id_rsa</replaceable> (or id_dsa)
+and <replaceable>id_rsa.pub</replaceable> (or id_dsa.pub). If, on the machine you
+want to log on, your id_rsa.pub has been authorized you can access the
+machine without providing a password. </para>
+
+<para>Importing your public key allow you to 'inject' it on any newly created
+VM in your project.
+</para>
+
+<para>
+The steps are as follows:
+</para>
+<itemizedlist>
+<listitem><para>Open the <menuchoice><guimenu>Compute
+</guimenu></menuchoice> tab on the left side</para></listitem>
+
+<listitem><para>Select <menuchoice><guimenu>Access &amp; Security
+</guimenu></menuchoice></para></listitem>
+
+<listitem><para>In the <menuchoice><guimenu>Key Pairs</guimenu></menuchoice> 
+section, select <menuchoice><guimenu>Import Key Pair</guimenu></menuchoice>. 
+</para></listitem>
+</itemizedlist>
+<para>
+You will need to give the keypair a name (your full username is a good choice), e.g.
+<replaceable>paolomazzon</replaceable>.</para>
+<para>On the "Public Key" field paste the content of your id_rsa.pub file</para>
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/import_keypair.png" />
+  <imagedata condition="pdf" fileref="./images/import_keypair.png" width="450" />
+</imageobject>
+</mediaobject>
+
+<para>
+Finally click on the <guimenu>Import Key Pair</guimenu> button
+</para>
+
+<warning><para>
+Be careful not to paste the content of your private key, the one without the '.pub' extension.
+</para></warning>
+
+<para>
+You can now choose your key pair when installing a VM as an access method.
+</para>
+
+</section>
+
+
+<section id="SecurityGroups">
+<title>Setting security group(s)</title>
+
+<para>
+Security groups are sets of IP rules (firewall) that define networking access and 
+are applied to all instances within a project using that group. As
+described in <xref linkend="CreatingVMs"/>, 
+when you create an instance you have to specify
+the security group to be used.
+</para>
+<para>
+To set such IP rules, users can either add them to the <replaceable>default</replaceable> security group 
+or can create a new security group with the desided rules.
+</para>
+
+<para>
+For example the following procedure enables SSH and ICMP (ping) access to 
+the <replaceable>default</replaceable> security group. The rules apply to all instances 
+within a given project using this security group, and should be set 
+(just once) for every 
+project, unless there is a reason to inhibit SSH or ICMP access to the 
+instances.</para>
+
+<para>
+This procedure can be adjusted as necessary to add additional security group 
+rules to a project, if needed.
+</para>
+<para>
+<itemizedlist>
+
+<listitem><para>
+Log in to the dashboard, choose a project, and click 
+<menuchoice><guimenu>Compute</guimenu><guisubmenu>Access &amp; Security</guisubmenu></menuchoice>. The 
+<menuchoice><guimenu>Security Groups</guimenu></menuchoice> tab shows the security 
+groups that are available for this project.
+</para></listitem>
+
+<listitem><para>
+Select the <menuchoice><guimenu>default</guimenu></menuchoice> 
+security group and click <menuchoice><guimenu>Manage Rules</guimenu></menuchoice>.
+</para></listitem>
+
+<listitem><para>
+To allow SSH access, click <menuchoice><guimenu>Add Rule</guimenu></menuchoice>.
+</para></listitem>
+<listitem><para> 
+In the Add Rule dialog box, enter the following values:
+
+<informaltable frame="all">
+<tgroup cols="2">
+<tbody>
+    <row><entry>Rule</entry><entry>SSH</entry></row>
+    <row><entry>Remote</entry><entry>CIDR</entry></row>
+    <row><entry>CIDR</entry><entry>0.0.0.0/0</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+
+
+<note><para>
+To accept requests from a particular range of IP addresses, specify the IP address block in 
+the <menuchoice><guimenu>CIDR</guimenu></menuchoice> box.
+</para></note>
+
+</para></listitem>
+<listitem><para>
+Click <menuchoice><guimenu>Add.</guimenu></menuchoice>
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+<itemizedlist>
+<listitem><para>
+To add an ICMP rule, click <menuchoice><guimenu>Add Rule</guimenu></menuchoice>.
+</para></listitem>
+
+
+<listitem><para>
+In the Add Rule dialog box, enter the following values:
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+    <row><entry>Rule</entry><entry>All ICMP</entry></row>
+    <row><entry>Direction</entry><entry>Ingress</entry></row>
+    <row><entry>Remote</entry><entry>CIDR</entry></row>
+    <row><entry>CIDR</entry><entry>0.0.0.0/0</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</para></listitem> 
+
+<listitem><para>
+Click <menuchoice><guimenu>Add.</guimenu></menuchoice>
+</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<warning><para>
+If you need to enable some services on a Virtual Machine, besides setting the
+specific IP rules through security groups, be sure that the relevant ports are 
+also enabled (e.g. via firewalld) on the Virtual Machine.
+</para></warning>
+
+</section>
+
+
+<section id="PasswordManagement">
+<title>Password management</title>
+
+<section id="Foreword">
+<title>Foreword</title>
+<warning><para>
+If you access the cloud either through UniPD SSO or INFN AAI you already
+have a password <replaceable>that you cannot change with this procedure.</replaceable>
+</para></warning>
+
+<para id="PasswordOnlyIf">
+You need to use this procedure only if:
+<itemizedlist>
+   <listitem><para>
+      You access the cloud through username and password and you want to change that password;
+   </para></listitem>
+   <listitem><para>
+      You want to use the cloud resources through command line (see <xref linkend="AccessingtheCloudthroughCLI"/> ).
+   </para></listitem>
+</itemizedlist>
+</para>
+</section>
+
+<section id="SettingPassword">
+<title>Setting/changing password</title>
+
+<para>
+From the OpenStack dashboard click on your user's name (on the top), select 
+<menuchoice><guimenu>Settings</guimenu></menuchoice> from the dropdown menu and
+then <menuchoice><guimenu>Manage Password</guimenu></menuchoice>.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/changepasswd_prod.png" />
+  <imagedata condition="pdf" fileref="./images/changepasswd_prod.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+<important><para>
+Once again: this is the password to authenticate with the Cloud "internal" authentication
+mechanism. It is uncorrelated from the UniPD SSO or INFN-AAI one.
+</para></important>
+</section>
+
+</section>
+
+
+<section id="SwitchingBetweenProjects">
+<title>Switching between projects</title>
+
+<para>
+As introduced in <xref linkend="Projects"/>,
+a user can be on multiple projects at the same time. The current 
+project is indicated by the top left dropdown menu near the logo.
+</para>
+
+<para>
+To switch between projects just open the dropdown menu
+(as shown in the following figure) and select one of your available projects.
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/ProjectSwitch.png" />
+  <imagedata condition="pdf" fileref="./images/ProjectSwitch.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
+
+</section>
+
+<section id="AccessingtheCloudthroughCLI">
+<title>Accessing the Cloud with command line tools</title>
+<para>
+It is possible to manage the Cloud using command line tools, 
+even if most of the functionality provided by 
+the Cloud can be accessed through the dashboard web interface.
+The <ulink url="http://docs.openstack.org/cli-reference/">documentation</ulink> on the OpenStack site
+contains extended information on the syntax and installation procedure of the command line tools.
+</para>
+
+<important><para>
+Command line tools can only be used with the Cloud "internal" authentication
+mechanism. Even if you normally access the cloud dashboard using the UniPD SSO or INFN-AAI
+it's now time to <link linkend="PasswordOnlyIf">set a password.</link>
+</para></important>
+
+<para>
+The OpenStack tools require a set of shell environment variables in order to 
+run. These variables can be obtained from the dashboard and then stored in an 'rc' file
+that you can source (much like your .profile) when logging into a linux server.
+</para>
+
+<para>The environment variables are different for project you work on.</para>
+
+<para>If you log into the dashboard, you 
+will find an <menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice>
+under the <menuchoice><guimenu>Compute</guimenu></menuchoice> menu on the left hand side. 
+Choose the <menuchoice><guimenu>API Access</guimenu></menuchoice> Tab to select the 
+options related to using the program interfaces. Select the 
+<menuchoice><guimenu>Download OpenStack RC file</guimenu></menuchoice> option 
+to download the rc file for your current project. 
+</para>
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/download_rc.png" />
+  <imagedata condition="pdf" fileref="./images/download_rc.png" width="450" />
+</imageobject>
+</mediaobject>
+
+<para>
+This file should be 
+saved onto the machineyou want to run the commands from. If you use 
+csh rather than bash/zsh for your shell, you would need to create a new 
+version using <replaceable>setenv</replaceable> rather than <replaceable>export</replaceable>.
+</para>
+
+<para>
+In the CEDC cloud, since services are secured using SSL, you will need the
+<literal>cedc-chain.pem</literal> "certification authority" file. This file can be downloaded (zipped)
+
+<ulink url="https://cloud.cedc.csia.unipd.it/User_Guide/cedc-chain.zip">from here.</ulink> 
+</para>
+
+<para>Once you get the file you need to edit the RC file to set the
+<literal>OS_CACERT</literal> variable like this:
+
+<screen>
+export OS_CACERT=/etc/grid-security/certificates/cedc-chain.pem
+</screen>
+
+</para>
+
+<note><para>The certificate can be put anywhere on the client as long as the path
+you specify is consistent.</para></note>
+
+<para>
+To test it works, source the rc script file and enter your password to 
+authenticate. The OpenStack command line tools (nova for compute resources, 
+glance for images) can then be used, e.g.:
+</para>
+<screen>
+$ . demo-openrc.sh 
+Please enter your OpenStack Password: 
+$ nova list
++--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
+| ID                                   | Name                                        | Status | Task State | Power State | Networks             |
++--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
+| d85a4221-b2cc-4bcd-8c56-af21afa8ce5c | Monitoring_Server                           | ACTIVE | -          | Running     |  demo_net=10.62.13.5 |
+| 60005bae-93df-454e-9e1f-07c3be27157c | MySQL_Server                                | ACTIVE | -          | Running     |  demo_net=10.62.13.6 |
+| 6cbb5ded-ba65-4850-8078-1e9f1836e7de | Server 6cbb5ded-ba65-4850-8078-1e9f1836e7de | ACTIVE | -          | Running     |  demo_net=10.62.13.2 |
+| 5ce6926a-2796-4dbd-82f2-d84ced6acf38 | Xrootd_Server                               | ACTIVE | -          | Running     |  demo_net=10.62.13.4 |
++--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
+</screen>
+
+<note><para>
+When you source the rc script you are asked for a password. If the 
+password is wrong, you will be told (with an authentication error) only
+when you issue some OpenStack command.
+</para></note>
+
+</section>
+
+<section id="AccessingtheCloudthroughEC2">
+<title>Accessing the Cloud through the euca2ools EC2 command line tools</title>
+<para>
+The CloudVeneto also exposes a EC2 interface, which is a de-facto 
+standard for computational clouds.
+</para>
+
+<para>
+The <literal>euca2ools</literal> are command line tools that can be used to 
+interact with an EC2 based cloud.
+The euca2ools require a set of shell environment variables in order to run. 
+These environment variables are different per project that you work on.
+</para>
+
+<para>You can install the <literal>euca2ools</literal> package as
+follows:</para>
+<para>CentOS / Fedora
+<screen>
+  # yum install euca2ools
+</screen>
+</para>
+<para>Ubuntu / Debian
+<screen>
+  # apt-get install euca2ools
+</screen>
+</para>
+
+
+<para>
+The euca2ools are also installed on <literal>cld-blu-gate.cedc.csia.it</literal>.
+</para>
+
+
+<para>
+If you log into the dashboard, you 
+will find an <menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice>
+menu on the left hand side. Then choose the 
+<menuchoice><guimenu>API Access</guimenu></menuchoice> Tab to select the 
+options related to using the program interfaces. Select the 
+<menuchoice><guimenu>Download EC2 Credentials</guimenu></menuchoice> option 
+on the top right to download the zip file for your current project.
+This zip file will be downloaded from the browser. 
+</para>
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/download_ec2rc.png" />
+  <imagedata condition="pdf" fileref="./images/download_ec2rc.png" width="450" />
+</imageobject>
+</mediaobject>
+
+<para>
+This file should be saved onto the machine where 
+you want to run the commands from and unzipped into a private directory, e.g:
+</para>
+
+<screen>
+$ unzip testing-x509.zip 
+Archive:  testing-x509.zip
+extracting: pk.pem                  
+extracting: cert.pem                
+extracting: cacert.pem              
+extracting: ec2rc.sh   
+</screen>
+
+<para>
+ec2rc.sh gives the variables for accessing the Cloud with EC2 APIs. If you 
+use a C shell based shell, you would need to adapt this using setenv. 
+
+</para>
+
+<para>
+To test it, you can e.g. try the following:
+</para>
+
+<screen>
+$ . ec2rc.sh 
+$ euca-describe-instances
+
+
+RESERVATION	r-t7x3t9zx	f96899662ae5413a95d75bea2bc180b7	
+INSTANCE	i-0004efde	ami-0000001b		rigo1	running	None (f96899662ae5413a95d75bea2bc180b7, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.small	2016-06-29T12:56:35.000Z	nova		10.67.10.6			instance-store											
+RESERVATION	r-y3z5nc4p	eb366f2f594d4bc3a4fb19a45f0eca48	
+INSTANCE	i-00028167	ami-00000013		centos-test-xrdp	running	test-kvm (eb366f2f594d4bc3a4fb19a45f0eca48, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.small	2015-12-27T19:20:55.000Z	nova						10.67.4.20			instance-store											
+RESERVATION	r-wqia3uhs	f96899662ae5413a95d75bea2bc180b7	
+INSTANCE	i-0004efdb	ami-0000001b		rigobello1	error	None (f96899662ae5413a95d75bea2bc180b7, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.tiny	2016-06-29T12:52:39.000Z	nova	instance-store											
+RESERVATION	r-kemjhamo	7114e3c97144459a9c8afbb9f09b4def	
+INSTANCE	i-00001aca	ami-00000018	90.147.143.153	cld-blu-gate	running	None (7114e3c97144459a9c8afbb9f09b4def, cld-blu-13.cloud.pd.infn.it)	0		cloudveneto.small	2015-06-30T12:56:56.000Z	nova	90.147.143.153	10.68.1.2			instance-store											
+RESERVATION	r-rmy09zqr	7114e3c97144459a9c8afbb9f09b4def	
+INSTANCE	i-00060b43	ami-00000002		cld-blu-13.cloud.pd.infn.it-nagiostest-2016-09-23-153310	running	None (7114e3c97144459a9c8afbb9f09b4def, cld-blu-13.cloud.pd.infn.it)	0		cloudveneto.tiny	2016-09-23T13:33:13.000Z	nova						192.168.1.193			instance-store											
+RESERVATION	r-l22sm2tk	7e4579b80d1546ac86b13700d86f55e0	
+INSTANCE	i-0004c143	ami-00000045		vmblack3	running	mattia_keypair (7e4579b80d1546ac86b13700d86f55e0, cld-blu-09.cloud.pd.infn.it)	0		cloudveneto.xlarge	2016-06-15T16:49:14.000Z	nova	10.67.7.19			instance-store											
+RESERVATION	r-8ejrnbkp	66958fd42fb743a9a9ab267cf42072df	
+INSTANCE	i-0004941c	ami-00000057		cld-blu-09.cloud.pd.infn.it-2016-06-02-141417	stopped	None (66958fd42fb743a9a9ab267cf42072df, cld-blu-09.cloud.pd.infn.it)	0		cloudveneto.medium	2016-06-02T12:14:21.000Z	nova
+....
+....
+</screen>
+
+<warning>
+<para>
+For some euca2ools distributions sourcing the ec2rc.sh script is not enough.
+You need to explictly specify access and secret keys and the endpoint with the
+relevant command line options, e.g.:
+<screen>
+$ euca-describe-instances -I ${EC2_ACCESS_KEY} -S ${EC2_SECRET_KEY} -U ${EC2_URL}
+</screen>
+This is true, as an example, for the tools installed on cld-blu-gate.cedc.csia.unipd.it  
+</para>
+</warning>
+
+</section>
+
+
+</chapter>
+

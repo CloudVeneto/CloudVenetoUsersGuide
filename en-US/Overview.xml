@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="Overview">
+<title>Overview of the CloudVeneto</title>
+<para>                                                                          
+The <literal>CloudVeneto</literal> is an OpenStack based cloud.         
+</para>
+
+<para>
+It implements a IaaS (Infrastructure as a service):
+it allows the instantiation of Virtual Machines (VMs) of the desired
+environments (in terms of operating system, installed software, etc.)
+and of the desired flavors (in terms of processors, memory size, etc.).
+</para>
+
+
+<para>                                                                          
+Even if it is a single, logical Cloud service, its resources are spread in various  
+different locations: CSIA Padova, INFN Padova and INFN Laboratori Nazionali di Legnaro (LNL). 
+
+</para>
+
+<para>                                                                          
+The CloudVeneto is currently based on the Icehouse version of the    
+OpenStack middleware.                     
+</para>
+
+
+<section id="Projects">
+<title>Projects</title>
+<para>
+<literal>Projects</literal> (also known as tenants)                             
+are organizational units in the cloud. A project is used to map or isolate users 
+and their resources. </para>
+
+<para>                                                                             
+Projects are given quotas on resource usage, in terms of virtual machines, cores,  
+memory, storage, etc.                                                              
+</para>
+
+<para>                                                                             
+A project can have a single user as member (personal project) but the typical use  
+case are shared projects, with multiple users as members, which can map to experiments,                                                          organizations, research groups, etc.                                               
+A user can be on multiple projects at the same time and switch between them.       
+</para>
+
+
+<para>
+In the CloudVeneto projects usually map to experiments or other research 
+groups. Among the project's users there is a team leader who is responsible to manage
+(accepting or refusing) membership requests for the project.                       
+</para>
+
+<!-- para>                                                                             
+A special shared project, called <literal>guest</literal> is used for all other    
+users: it has a small quota to allow testing the Cloud infrastructure.             
+</para -->
+
+<warning><para>                                                                
+<literal>Personal private</literal> projects are instead discouraged and are created only for 
+convincing  reasons.     
+</para></warning>
+</section>
+
+
+<section id="NetworkAccess">
+
+<title>Network access</title>
+<para>                                                                         
+Access to Virtual Machines created in the CloudVeneto depends on your affiliation.
+
+<itemizedlist>
+
+<listitem><para><literal>INFN users:</literal></para>
+<para>
+VM are by default “visible” from the Local Area Networks (LANs) of both Padova and 
+LNL. This means that e.g. users can access via ssh VMs of the Cloud directly 
+from their desktops located in Padova or Legnaro. 
+
+It is then possible to control which services/ports can be accessed
+using the security groups (discussed later) and firewalls
+on the relevant VMs.
+</para>
+
+<para>
+If it is necessary to log on a VM of the Cloud from the Internet, it is 
+necessary to go through a gate machine. For this purpose users can rely
+on the existing gate hosts in Padova and Legnaro. 
+Users who don't have an account on such gate hosts can rely on 
+a Cloud specific gate host (<literal>cld-gate.pd.infn.it</literal>): please contact 
+<email>cedc-support@lists.pd.infn.it</email> if you need an account on such 
+machine.
+</para>
+
+<para>
+If needed, e.g. if a VM should host a service accessible from the 
+Internet, such VM on the Cloud can be given a public IP.
+If this is the case please contact 
+<email>cedc-support@lists.pd.infn.it</email>. 
+</para>
+</listitem>
+
+<listitem><para><literal>UNIPD users:</literal></para>
+<para>
+VM may be accessed from a gate (<literal>cld-blu-gate.cedc.csia.unipd.it</literal>): please contact
+<email>cedc-support@lists.pd.infn.it</email> if you need an account on such
+machine.
+</para>
+<para>
+If needed, e.g. if a VM should host a service accessible from the 
+Internet, such VM on the Cloud can be given a public IP.
+If this is the case please contact 
+<email>cedc-support@lists.pd.infn.it</email>. 
+</para>
+</listitem>
+
+<listitem><para><literal>"external" users:</literal></para>
+<para>Please contact <email>cedc-support@lists.pd.infn.it</email>
+</para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+From a VM of the Cloud, it is possible to access the Internet, while by default
+it is not possible to access a host/service hosted in Padova or Legnaro. 
+If, for some reasons, you need to access some
+services hosted in Padova or Legnaro from the Cloud, please contact
+<email>cedc-support@lists.pd.infn.it</email>.
+</para>
+
+</section>
+
+
+<section id="GettingHelp">
+<title>Getting help</title>
+<para>                                                                             
+If you have problems using the CloudVeneto cloud, please 
+contact the admins at <email>cedc-support@lists.pd.infn.it</email>.
+</para>
+
+<warning>
+<para>
+Disclaimer: technical support on the CloudVeneto platform is provided on <literal>best effort</literal> basis.
+The CloudVeneto provide and infrastructure where you can instantiate your servers but, once activated, your
+server are <literal>managed by you</literal>.
+</para>
+
+<para>This implies that the support crew <literal>don't provide support</literal> on topics like:</para>
+
+<itemizedlist>
+<listitem><para>How to install/compile/configure your software;</para></listitem>
+<listitem><para>ssh / scp basic usage (ask your Department / Institution technicians about that);</para></listitem>
+<listitem><para>Basic linux usage (except what's described in this guide);</para></listitem>
+<listitem><para>Accessing your VM 'the graphical way'.</para></listitem>
+</itemizedlist>
+
+</warning>
+
+<para>                                                                             
+Changes and planned interventions to the service will be posted on the             
+<email>cloud-users@pd.infn.it</email>.                                       
+All registered users to the Cloud are member of this mailing list.    
+</para>
+</section>
+
+
+<section id="GivingCredit">
+<title>Acknowledge CloudVeneto / Scientific citations</title>
+<para>    
+If you wish to give credit for the use of the CloudVeneto infrastructure in your scientific publication or elsewhere the following quote can be used:
+</para>
+<para>
+<blockquote>
+<para>"CloudVeneto is acknowledged for the use of computing and storage facilities."</para>
+</blockquote>
+</para>
+<para>
+This technical report can also be used as a reference:
+<ulink url="http://paduaresearch.cab.unipd.it/9653/">Progetto CloudVeneto.it - Status Report.</ulink>
+</para>
+</section>
+
+</chapter>
