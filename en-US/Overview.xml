@@ -91,7 +91,7 @@ necessary to go through a gate machine. For this purpose users can rely
 on the existing gate hosts in Padova and Legnaro. 
 Users who don't have an account on such gate hosts can rely on 
 a Cloud specific gate host (<literal>cld-gate.pd.infn.it</literal>): please contact 
-<email>cedc-support@lists.pd.infn.it</email> if you need an account on such 
+<email>support@cloudveneto.it</email> if you need an account on such 
 machine.
 </para>
 
@@ -99,26 +99,26 @@ machine.
 If needed, e.g. if a VM should host a service accessible from the 
 Internet, such VM on the Cloud can be given a public IP.
 If this is the case please contact 
-<email>cedc-support@lists.pd.infn.it</email>. 
+<email>support@cloudveneto.it</email>. 
 </para>
 </listitem>
 
 <listitem><para><literal>UNIPD users:</literal></para>
 <para>
 VM may be accessed from a gate (<literal>cld-blu-gate.cedc.csia.unipd.it</literal>): please contact
-<email>cedc-support@lists.pd.infn.it</email> if you need an account on such
+<email>support@cloudveneto.it</email> if you need an account on such
 machine.
 </para>
 <para>
 If needed, e.g. if a VM should host a service accessible from the 
 Internet, such VM on the Cloud can be given a public IP.
 If this is the case please contact 
-<email>cedc-support@lists.pd.infn.it</email>. 
+<email>support@cloudveneto.it</email>. 
 </para>
 </listitem>
 
 <listitem><para><literal>"external" users:</literal></para>
-<para>Please contact <email>cedc-support@lists.pd.infn.it</email>
+<para>Please contact <email>support@cloudveneto.it</email>
 </para>
 </listitem>
 
@@ -130,7 +130,7 @@ From a VM of the Cloud, it is possible to access the Internet, while by default
 it is not possible to access a host/service hosted in Padova or Legnaro. 
 If, for some reasons, you need to access some
 services hosted in Padova or Legnaro from the Cloud, please contact
-<email>cedc-support@lists.pd.infn.it</email>.
+<email>support@cloudveneto.it</email>.
 </para>
 
 </section>
@@ -140,7 +140,7 @@ services hosted in Padova or Legnaro from the Cloud, please contact
 <title>Getting help</title>
 <para>                                                                             
 If you have problems using the CloudVeneto cloud, please 
-contact the admins at <email>cedc-support@lists.pd.infn.it</email>.
+contact the admins at <email>support@cloudveneto.it</email>.
 </para>
 
 <warning>
