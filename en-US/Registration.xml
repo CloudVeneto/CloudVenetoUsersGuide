@@ -247,7 +247,7 @@ Your request will be managed by the Cloud adminstrator and by
 the manager(s) of the project(s) for which you applied membership.
 You will get an e-mail when your request is approved (and therefore you
 can start using the CloudVeneto) or if for some reason
-your request is refused. TBC qui
+your request is refused. 
 </para>
 
 
@@ -262,7 +262,7 @@ If and only if you don't have an account on the UniPD SSO or INFN AAI, click on 
 
 <mediaobject>
 <imageobject>
-  <imagedata fileref="./images/LocalAccount.png" />
+  <imagedata fileref="./images/RegisterLocalAccount.png" />
 </imageobject>
 </mediaobject>
 </para>
@@ -293,7 +293,7 @@ Specify the name of a contact person in Padova/Legnaro
 </para>
 
 <para>
-<literal>Your request will be accepted only if you specify a
+<literal>UniPD users: your request will be accepted only if you specify a
 valid reference person from your Department/Institution.</literal> Please refer to the following table
 to contact the appropriate person:
 <table>
@@ -315,8 +315,6 @@ to contact the appropriate person:
       <row> <entry>Biomedical Sciences Dept.</entry>                 <entry>prof. Silvio Tosatto</entry> </row>
       <row> <entry>Chemical Sciences Dept.</entry>                   <entry>prof. Antonino Polimeno</entry> </row>
       <row> <entry>Pharmaceutical Sciences Dept.</entry>             <entry>prof. Stefano Moro</entry> </row>
-      <row> <entry>INFN - Padova</entry>                             <entry>dott. Mauro Morandin</entry> </row>
-      <row> <entry>INFN - Legnaro</entry>                            <entry>dott. Michele Gulmini</entry> </row>
    </tbody>
    </tgroup>
 </table>
@@ -369,26 +367,37 @@ a small quota used to test the Cloud infrastructure.
 </para>
 
 
-<para>
-When you have filled the form, read and accept the AUP clicking on the 
-<menuchoice><guimenu>Accept the AUP</guimenu></menuchoice> button on the right.
-</para>
 
 <para>
-Once you have accepted the AUP the <menuchoice><guimenu>Register</guimenu></menuchoice>
-button will be available for you to click.
+When you have filled the form, please read the AUP that you need to accept (by clicking the 
+<menuchoice><guimenu>Accept</guimenu></menuchoice> button) to be allowed
+to have an account.
 </para>
 
+<!--para>
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/ReadAUP.jpg" />
+  <imagedata condition="pdf" fileref="./images/ReadAUP.jpg" width="450" />
+</imageobject>
+</mediaobject>
+
+</para-->
+
+
 <para>
-After you clicked the <menuchoice><guimenu>Register</guimenu></menuchoice> button this page should appear:
+Finally click on the <menuchoice><guimenu>Register</guimenu></menuchoice> 
+button and you are done.
 
 <mediaobject>
 <imageobject>
-  <imagedata fileref="./images/RegistrationDone.jpg" />
+  <imagedata condition="web" fileref="./images/RegistrationDone.png" />
+  <imagedata condition="pdf" fileref="./images/RegistrationDone.png" width="450" />
 </imageobject>
 </mediaobject>
 
 </para>
+
 
 <para>
 Your request will be managed by the Cloud adminstrator and by
@@ -438,6 +447,8 @@ Fulfill your request selecting the relevant choice under the <menuchoice><guimen
 <title>Manage project membership requests (only for project managers)</title>
 
 <para>
+TBC 
+
 If you are the manager of a project, you will receive membership requests
 for this project that you will have to manage (approving or refusing them).
 </para>
