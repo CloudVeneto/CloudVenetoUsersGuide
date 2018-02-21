@@ -25,18 +25,36 @@ the Horizon Openstack web service interface.
 </para>
 
 <para>    
-Go to 
-<ulink url="https://cloud.cedc.csia.unipd.it/dashboard">https://cloud.cedc.csia.unipd.it/dashboard</ulink> in a browser. 
+Go to <ulink url="https://cloud-areapd.pd.infn.it/dashboard">https://cloud-areapd.pd.infn.it/dashboard</ulink> or
+<ulink url="https://cloudveneto.ict.unipd.it/dashboard">https://cloudveneto.ict.unipd.it/dashboard</ulink> in a 
+browser. 
 The following page should appear:       
 </para>
     
 <para>
 <mediaobject>
 <imageobject>
-  <imagedata fileref="./images/dashboard_prod.png" />
+  <imagedata condition="web" fileref="./images/dashboard_prod.png" />
+  <imagedata condition="pdf" fileref="./images/dashboard_prod.png" scale="50" />
 </imageobject>
 </mediaobject>
 </para>
+
+<para>
+Click on the <menuchoice><guimenu>Register</guimenu></menuchoice> button. 
+The following page should appear:                                                                                    
+</para>
+
+
+<para>
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/dashboard_reg.png" />
+  <imagedata condition="pdf" fileref="./images/dashboard_reg.png" scale="50" />
+</imageobject>
+</mediaobject>
+</para>
+
 
 <para>                                                                             
 
@@ -49,14 +67,15 @@ click on the INFN AAI logo and proceed with <xref linkend="Enrollment"/>.
 </para></listitem>
 
 <listitem><para>
-If you instead have an account on the UniPD Single Sign-On (oSO)
+If you instead have an account on the UniPD Single Sign-On (SSO)
 Infrastructure (e.g. you have a username @unipd.it or @studenti.unipd.it), 
 click on the UniPD logo and proceed with <xref linkend="Enrollment"/>. 
 </para></listitem>
 
 <listitem><para> 
 If and only if you don't have neither an account on the INFN Authenticaton and
-Authorization Infrastructure (INFN AAI) nor on the UniPD SSO, proceed with 
+Authorization Infrastructure (INFN AAI) nor on the UniPD SSO, click on the
+first icon (the green one, with "Username" and "Password") and proceed with 
 <xref linkend="ApplyUsingUserPasswd"/>.
 </para></listitem>
 
@@ -65,12 +84,12 @@ Authorization Infrastructure (INFN AAI) nor on the UniPD SSO, proceed with
 
 </para>
 
-<warning><para>
+<!--warning><para>
 Authentication through <literal>IDEM</literal> (the Italian identity 
 federation of universities and research institutes for authentication and 
 authorization) is being setup and therefore the relevant icon might appear
 in the Dashboard. However this is not yet operational.
-</para></warning>
+</para></warning-->
 
 
 
@@ -79,7 +98,7 @@ in the Dashboard. However this is not yet operational.
 
 
 <para>
-Once authenticated on your SSO system you will be redirected to a form like this:
+Once authenticated on your Identity Provider system, you will be redirected to a form like this (TBC fig):
 </para>
 
 <para>
@@ -92,13 +111,14 @@ Once authenticated on your SSO system you will be redirected to a form like this
 </para>
 
 <para>
+TBC
 Fill the form with the name of your organization (e.g. 'INFN Padova'),
 your phone number, the name of a contact person in Padova/Legnaro
 (e.g. your team leader), and if needed some notes.
 </para>
 
 <para>
-<literal>Your request will be accepted only if you specify a
+<literal>UniPD users: your request will be accepted only if you specify a
 valid reference person from your Department/Institution.</literal> Please refer to the following table
 to contact the appropriate person:
 <table>
@@ -120,8 +140,6 @@ to contact the appropriate person:
       <row> <entry>Biomedical Sciences Dept.</entry>                 <entry>prof. Silvio Tosatto</entry> </row>
       <row> <entry>Chemical Sciences Dept.</entry>                   <entry>prof. Antonino Polimeno</entry> </row>
       <row> <entry>Pharmaceutical Sciences Dept.</entry>             <entry>prof. Stefano Moro</entry> </row>
-      <row> <entry>INFN - Padova</entry>                             <entry>dott. Mauro Morandin</entry> </row>
-      <row> <entry>INFN - Legnaro</entry>                            <entry>dott. Michele Gulmini</entry> </row>
    </tbody>
    </tgroup>
 </table>
@@ -130,11 +148,12 @@ to contact the appropriate person:
 <para>
 For what concerns the <menuchoice><guimenu>Project Action</guimenu></menuchoice>
 (projects have been discussed in <xref linkend="Projects"/>) you 
-have two options:
+have three options:
 
 <itemizedlist>
 <listitem><para>Select Existing Projects</para></listitem>
 <listitem><para>Create new project</para></listitem>
+<listitem><para>Use guest project</para></listitem>
 </itemizedlist>
 
 </para>
@@ -147,7 +166,9 @@ box).
 
 <para>
 Select <literal>Create new project</literal> if instead you want to ask
-the creation of a new project. In this case you will have to specify also
+the creation of a new project (and you are the leader of the experiment/research 
+group associated to this project).
+In this case you will have to specify also
 a Project name and a Project Description. You will also have to specify
 if this project must be private (a personal project where you will
 be the only member) or not.
@@ -160,8 +181,8 @@ Newly created projects will get a default quota of:
 <listitem><para>40 GB RAM</para></listitem>
 <listitem><para>200 GB for Volume (e.g. non ephemeral) storage</para></listitem>
 </itemizedlist>
-Allocation of more resources must be approved by the Cloud "governance".</para>
-<para>Mail your request to <email>cloud-unipd-gov@lists.pd.infn.it</email> 
+Allocation of more resources for UniPD users must be approved by the Cloud UniPD "governance".
+Mail your request to <email>cloud-unipd-gov@lists.pd.infn.it</email> 
 if you want more resources to be allocated to your project.
 </para>
 
@@ -184,13 +205,20 @@ project should be done by the relevant experiment/group leader.
 </para>
 </note>
 
-<para>
-When you have filled the form, click on the 
-<menuchoice><guimenu>Read the AUP</guimenu></menuchoice> button. The following
-window will appear.
+<para>                                                                          
+Select <literal>Use guest project</literal> if you want to apply membership     
+for the guest project, i.e. the project with                                    
+a small quota used to test the Cloud infrastructure.                            
 </para>
 
+
 <para>
+When you have filled the form, please read the AUP that you need to accept (by clicking the 
+<menuchoice><guimenu>Accept</guimenu></menuchoice> button) to be allowed
+to have an account.
+</para>
+
+<!--para>
 <mediaobject>
 <imageobject>
   <imagedata condition="web" fileref="./images/ReadAUP.jpg" />
@@ -198,13 +226,8 @@ window will appear.
 </imageobject>
 </mediaobject>
 
-</para>
+</para-->
 
-<para>
-Read the AUP that you need to accept (by clicking the 
-<menuchoice><guimenu>Accept</guimenu></menuchoice> button) to be allowed
-to have an account.
-</para>
 
 <para>
 Finally click on the <menuchoice><guimenu>Register</guimenu></menuchoice> 
@@ -212,7 +235,8 @@ button and you are done.
 
 <mediaobject>
 <imageobject>
-  <imagedata fileref="./images/RegistrationDone.jpg" />
+  <imagedata condition="web" fileref="./images/RegistrationDone.png" />
+  <imagedata condition="pdf" fileref="./images/RegistrationDone.png" width="450" />
 </imageobject>
 </mediaobject>
 
@@ -223,7 +247,7 @@ Your request will be managed by the Cloud adminstrator and by
 the manager(s) of the project(s) for which you applied membership.
 You will get an e-mail when your request is approved (and therefore you
 can start using the CloudVeneto) or if for some reason
-your request is refused.
+your request is refused. TBC qui
 </para>
 
 
