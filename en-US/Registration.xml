@@ -447,8 +447,6 @@ Fulfill your request selecting the relevant choice under the <menuchoice><guimen
 <title>Manage project membership requests (only for project managers)</title>
 
 <para>
-TBC 
-
 If you are the manager of a project, you will receive membership requests
 for this project that you will have to manage (approving or refusing them).
 </para>
@@ -485,8 +483,11 @@ will appear.
 
 
 <para>
-To manage a membership request click on the corresponding                      
-<menuchoice><guimenu>Process</guimenu></menuchoice> button.
+To approve a membership request, click on the 
+<menuchoice><guimenu>Approve</guimenu></menuchoice> button
+(in <menuchoice><guimenu>Actions</guimenu></menuchoice>).
+
+
 A window such as the following one will appear:
 
 <mediaobject>
@@ -498,12 +499,32 @@ A window such as the following one will appear:
 </para>
 
 <para>
-Click on the 
-<menuchoice><guimenu>Approve</guimenu></menuchoice> button to approve
+Set the expiration date of the account, and click on the
+<menuchoice><guimenu>Ok</guimenu></menuchoice> button to approve
 the request.
-Otherwise, to reject the request, click on the 
-<menuchoice><guimenu>Reject</guimenu></menuchoice> button.
 </para>
+
+<para>
+If, instead, you want to reject the request, select
+<menuchoice><guimenu>Reject</guimenu></menuchoice> in  
+<menuchoice><guimenu>Actions</guimenu></menuchoice>.
+
+
+</para>
+
+
+<note><para>
+It is therefore up to the project manager to set the expiration date
+of the members of his/her group.
+</para>
+
+<para>
+A user belonging to multiple projects can have different expiration dates
+for the different projects he/she belongs to.
+</para>
+</note>
+
+
 
 </section>
 
@@ -511,14 +532,14 @@ Otherwise, to reject the request, click on the
 <title>Manage project members requests (only for project managers)</title>
 
 <para>
-  If you are a project manager you can modify the members list of your
-  project.
+If you are the manager of a project, you can list the members of your project and, if needed, 
+change their role.
 </para>
 
 <para>
   Open the OpenStack web dashboard, i.e. go to
-  <ulink url="https://cloud.cedc.csia.unipd.it/dashboard">https://cloud.cedc.csia.unipd.it/dashboard</ulink>
-  in a browser. Log in using the relevant method an access the 
+  <ulink url="https://cloudveneto.ict.unipd.it/dashboard">https://cloudveneto.ict.unipd.it/dashboard</ulink>
+  in a browser. Log in using the relevant method and access the 
   <menuchoice><guimenu>Identity</guimenu><guisubmenu>Project Members</guisubmenu></menuchoice>
   panel. The list of users affiliated to your project will appear:
 
@@ -548,5 +569,14 @@ Otherwise, to reject the request, click on the
 
 </section>
 
+
+<section id="ManageAccountRenewal">
+<title>Manage account renewals (only for project managers)</title>
+
+<para>
+TBC
+</para>
+
+</section>
 
 </chapter>
