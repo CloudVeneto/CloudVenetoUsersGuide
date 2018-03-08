@@ -444,8 +444,8 @@ $
 
 <note><para>
 When you source the rc script you are asked for a password. If the 
-password is wrong, you will be told (with an authentication error) only
-when you issue some OpenStack command.
+password is wrong, you will be told (with a generic authentication error) only
+when you issue some OpenStack commands.
 </para></note>
 
 </section>
@@ -453,18 +453,16 @@ when you issue some OpenStack command.
 <section id="AccessingtheCloudthroughEC2">
 <title>Accessing the Cloud through the euca2ools EC2 command line tools</title>
 <para>
-The CloudVeneto also exposes a EC2 interface, which is a de-facto 
+The CloudVeneto also exposes a EC2 compatible interface, which is a de-facto 
 standard for computational clouds.
 </para>
 
 <para>
 The <literal>euca2ools</literal> are command line tools that can be used to 
 interact with an EC2 based cloud.
-The euca2ools require a set of shell environment variables in order to run. 
-These environment variables are different per project that you work on.
 </para>
 
-<para>You can install the <literal>euca2ools</literal> package as
+<para>You can install the <literal>euca2ools</literal> package on your dekstop as
 follows:</para>
 <para>CentOS / Fedora
 <screen>
@@ -478,41 +476,53 @@ follows:</para>
 </para>
 
 
+<note>
 <para>
-The euca2ools are also installed on <literal>cld-blu-gate.cedc.csia.it</literal>.
+INFN-Padova users can find the euca2ools installed on <literal>lx.pd.infn.it</literal>.
+</para>
+</note>
+
+<para>
+The euca2ools require a set of shell environment variables in order to run. 
+These environment variables are different per project that you work on.
+</para>
+
+<para>If you log into the dashboard, you 
+will find <menuchoice><guimenu>API Access</guimenu></menuchoice>
+under the <menuchoice><guimenu>Compute</guimenu></menuchoice> menu on the left hand side. 
 </para>
 
 
+
+
 <para>
-If you log into the dashboard, you 
-will find an <menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice>
-menu on the left hand side. Then choose the 
-<menuchoice><guimenu>API Access</guimenu></menuchoice> Tab to select the 
-options related to using the program interfaces. Select the 
+Select the 
 <menuchoice><guimenu>Download EC2 Credentials</guimenu></menuchoice> option 
-on the top right to download the zip file for your current project.
+to download the zip file for your current project.
 This zip file will be downloaded from the browser. 
 </para>
 
+
 <mediaobject>
 <imageobject>
-  <imagedata condition="web" fileref="./images/download_ec2rc.png" />
-  <imagedata condition="pdf" fileref="./images/download_ec2rc.png" width="450" />
+  <imagedata condition="web" fileref="./images/download_rc.png" />
+  <imagedata condition="pdf" fileref="./images/download_rc.png" width="450" />
 </imageobject>
 </mediaobject>
 
+
 <para>
 This file should be saved onto the machine where 
-you want to run the commands from and unzipped into a private directory, e.g:
+you want to run the commands from, and unzipped into a private directory, e.g:
 </para>
 
 <screen>
-$ unzip testing-x509.zip 
-Archive:  testing-x509.zip
-extracting: pk.pem                  
-extracting: cert.pem                
-extracting: cacert.pem              
-extracting: ec2rc.sh   
+$ unzip SgaraPrj1-x509.zip 
+Archive:  SgaraPrj1-x509.zip
+ extracting: pk.pem                  
+ extracting: cert.pem                
+ extracting: cacert.pem              
+ extracting: ec2rc.sh           
 </screen>
 
 <para>
@@ -527,25 +537,16 @@ To test it, you can e.g. try the following:
 
 <screen>
 $ . ec2rc.sh 
-$ euca-describe-instances
-
-
-RESERVATION	r-t7x3t9zx	f96899662ae5413a95d75bea2bc180b7	
-INSTANCE	i-0004efde	ami-0000001b		rigo1	running	None (f96899662ae5413a95d75bea2bc180b7, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.small	2016-06-29T12:56:35.000Z	nova		10.67.10.6			instance-store											
-RESERVATION	r-y3z5nc4p	eb366f2f594d4bc3a4fb19a45f0eca48	
-INSTANCE	i-00028167	ami-00000013		centos-test-xrdp	running	test-kvm (eb366f2f594d4bc3a4fb19a45f0eca48, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.small	2015-12-27T19:20:55.000Z	nova						10.67.4.20			instance-store											
-RESERVATION	r-wqia3uhs	f96899662ae5413a95d75bea2bc180b7	
-INSTANCE	i-0004efdb	ami-0000001b		rigobello1	error	None (f96899662ae5413a95d75bea2bc180b7, cld-blu-10.cloud.pd.infn.it)	0		cloudveneto.tiny	2016-06-29T12:52:39.000Z	nova	instance-store											
-RESERVATION	r-kemjhamo	7114e3c97144459a9c8afbb9f09b4def	
-INSTANCE	i-00001aca	ami-00000018	90.147.143.153	cld-blu-gate	running	None (7114e3c97144459a9c8afbb9f09b4def, cld-blu-13.cloud.pd.infn.it)	0		cloudveneto.small	2015-06-30T12:56:56.000Z	nova	90.147.143.153	10.68.1.2			instance-store											
-RESERVATION	r-rmy09zqr	7114e3c97144459a9c8afbb9f09b4def	
-INSTANCE	i-00060b43	ami-00000002		cld-blu-13.cloud.pd.infn.it-nagiostest-2016-09-23-153310	running	None (7114e3c97144459a9c8afbb9f09b4def, cld-blu-13.cloud.pd.infn.it)	0		cloudveneto.tiny	2016-09-23T13:33:13.000Z	nova						192.168.1.193			instance-store											
-RESERVATION	r-l22sm2tk	7e4579b80d1546ac86b13700d86f55e0	
-INSTANCE	i-0004c143	ami-00000045		vmblack3	running	mattia_keypair (7e4579b80d1546ac86b13700d86f55e0, cld-blu-09.cloud.pd.infn.it)	0		cloudveneto.xlarge	2016-06-15T16:49:14.000Z	nova	10.67.7.19			instance-store											
-RESERVATION	r-8ejrnbkp	66958fd42fb743a9a9ab267cf42072df	
-INSTANCE	i-0004941c	ami-00000057		cld-blu-09.cloud.pd.infn.it-2016-06-02-141417	stopped	None (66958fd42fb743a9a9ab267cf42072df, cld-blu-09.cloud.pd.infn.it)	0		cloudveneto.medium	2016-06-02T12:14:21.000Z	nova
-....
-....
+$ euca-describe-instances -I ${EC2_ACCESS_KEY} -S ${EC2_SECRET_KEY} -U ${EC2_URL}
+RESERVATIONr-xvwmks74ee1865a76440481cbcff08544c7d580adefault
+INSTANCEi-3b49020eami-2cfcb026tinies-uno-1runningsgaravat-ctest0m1.tiny2018-03-02T12:56:32Znova10.1.1.10instance-storesg-3896bec1
+INSTANCEi-ebc7c470ami-2cfcb026tinies-uno-2runningsgaravat-ctest1m1.tiny2018-03-02T12:56:32Znova10.1.1.6instance-storesg-3896bec1
+INSTANCEi-bdd57278ami-2cfcb026tinies-uno-3runningsgaravat-ctest2m1.tiny2018-03-02T12:56:32Znova10.1.1.12instance-storesg-3896bec1
+INSTANCEi-e5bc209cami-2cfcb026tinies-uno-4runningsgaravat-ctest3m1.tiny2018-03-02T12:56:32Znova10.1.1.17instance-storesg-3896bec1
+INSTANCEi-afc80fcdami-2cfcb026tinies-uno-5runningsgaravat-ctest4m1.tiny2018-03-02T12:56:32Znova10.1.1.4instance-storesg-3896bec1
+RESERVATIONr-zpz5dkpnee1865a76440481cbcff08544c7d580adefault
+INSTANCEi-e93ef61cami-2cfcb026dasgara1-2running1m1.tiny2018-01-16T08:36:44Znova10.1.1.11instance-storesg-3896bec1
+$ 
 </screen>
 
 <warning>
@@ -556,7 +557,6 @@ relevant command line options, e.g.:
 <screen>
 $ euca-describe-instances -I ${EC2_ACCESS_KEY} -S ${EC2_SECRET_KEY} -U ${EC2_URL}
 </screen>
-This is true, as an example, for the tools installed on cld-blu-gate.cedc.csia.unipd.it  
 </para>
 </warning>
 
