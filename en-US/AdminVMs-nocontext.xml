@@ -201,6 +201,122 @@ select <menuchoice><guimenu>Console</guimenu></menuchoice> to access to the
 console of the VM.
 </para>
 
+<note>
+
+<para>                                                                          
+Virtual Machines instantiated on the Cloud by default aren't                    
+registered in the DNS. This means that you'll have to refer to them             
+using their IP numbers.                                                         
+</para>
+
+<para>                                                                          
+For Virtual Machines supposed to have a long life, INFN Padova users may        
+ask (contacting <email>supporto@pd.infn.it</email>)                  
+to have them registered in the DNS.                                             
+If possible (i.e. if the chosen names are sensible enough and if there are      
+no ambiguities) the registered names in the DNS will be the same as the ones    
+chosen as Instance names.                                                       
+</para>
+</note>
+
+<section id="CreatingVMsfromVolumes">
+<title>Improve reliability: creating Virtual Machines from Volumes</title>
+<para>                                                                          
+By default Virtual Machines are instantiated using the local disk               
+of the Cloud compute node.                                                      
+This means that, in case of failure of the Compute node, it may                 
+happen that the virtual machine content is lost.                                
+</para>
+
+<para>                                                                          
+For production servers which are not fully redundant and load balanced,         
+to improve the availability it is advisable to use an external storage         
+volume for the system disk of the virtual machine. The advantage is also        
+that, if the compute node hosting the virtual machine has to be switched        
+off e.g. for maintenance, the Cloud administrator before doing                  
+this operation can live-migrate the instance to another Cloud compute           
+node basically without any service interruption.                                
+</para>
+
+<para>                                                                          
+The procedure is the following:                                                 
+                                                                                
+<itemizedlist>
+
+<listitem><para>                                                                
+Create a volume using the desired image as source.                              
+</para></listitem>
+
+<listitem><para>                                                                
+Launch a Virtual Machine with that volume as the system disk.                   
+</para></listitem>
+
+</itemizedlist>
+</para>
+
+<para>                                                                          
+To create a volume from an image, go to the <replaceable>Volumes</replaceable>  
+tab of the Dahsboard, and click on <replaceable>Create Volume</replaceable>.    
+</para>
+<para>                                                                          
+After having set the Volume Name, set <replaceable>Image</replaceable> for      
+<replaceable>Volume Source</replaceable>                                        
+and specify the image name in the <replaceable>Use image as a source</replaceable> field.
+
+</para>
+
+<para>                                                                          
+Set the Size of the root disk (<replaceable>Size (GiB)</replaceable> field).    
+</para>
+<para>                                                                          
+Complete the operation clicking on <replaceable>Create Volume</replaceable>.    
+                                                                                
+<mediaobject>
+    <imageobject>
+    <imagedata condition="web" fileref="./images/create_volume_from_image.png" />
+    <imagedata condition="pdf" fileref="./images/create_volume_from_image.png" width="450"/>
+</imageobject>
+</mediaobject>
+</para>
+
+<note>
+<para>                                                                          
+TBC
+Please select 'ceph' (the default) as type for the volume                       
+</para>
+</note>
+<para>                                                                          
+Once the volume has been created, you can launch the Virtual Machine.           
+</para>
+
+<para>                                                                          
+In the <replaceable>Launch Instance</replaceable> form, that appears after having
+clicked on the <replaceable>Launch Instance</replaceable> button, please select
+<replaceable>Boot from volume</replaceable> in the                              
+<replaceable>Instance Boot Source</replaceable> field, and specify the name of the
+previously created                                                              
+volume in the <replaceable>Volume</replaceable> field.  
+
+<mediaobject>
+    <imageobject>
+    <imagedata condition="web" fileref="./images/launch_from_volume.png" />
+    <imagedata condition="pdf" fileref="./images/launch_from_volume.png" width="450"/>
+</imageobject>
+</mediaobject>
+
+</para>
+
+<para>                                                                          
+Then proceed as explained for the creation of a "normal" instance.              
+</para>
+<para>
+<note><para>                                                                    
+You can create only one virtual machine from a volume created using an image as source.
+</para></note>
+</para>
+
+</section>
+
 </section>
 
 <section id="AccessingVMs">
@@ -208,7 +324,7 @@ console of the VM.
 
 <para>
 <warning><para>
-TBC
+
 
 Please note that cloud VMs are not registered in the DNS, and therefore
 you must use their IP address.
