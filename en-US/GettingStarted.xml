@@ -21,7 +21,8 @@ dashboard, a web based GUI.
 <para>
 To access the production service of the CloudVeneto via the 
 dashboard, you must simply go 
-to  <ulink url="https://cloud.cedc.csia.unipd.it/dashboard/">https://cloud.cedc.csia.unipd.it/dashboard/</ulink> in a browser.
+to  <ulink url="https://cloudveneto.ict.unipd.it/dashboard/">https://cloudveneto.ict.unipd.it/dashboard/</ulink> or <ulink url="https://cloud-areapd.pd.infn.it/dashboard/">https://cloud-areapd.pd.infn.it/dashboard/</ulink>
+in a browser.
 </para>
 
 
@@ -33,16 +34,11 @@ to  <ulink url="https://cloud.cedc.csia.unipd.it/dashboard/">https://cloud.cedc.
 </mediaobject>
 
 <para>
-You can now log either using the INFN-AAI credentials, or 
-using the username and password.
+You can now log either using the INFN-AAI credentials, the University of Padova Single Sign On
+(SSO) system, or using the username and password.
 </para>
 
 
-<warning><para>
-Authentication through <literal>IDEM</literal> (the Italian identity
-federation of universities and research institutes for authentication and
-authorization) is being setup and therefore the relevant icon might appear
-in the Dashboard. However this is not yet operational.                          </para></warning>
 
 
 </section>
@@ -64,7 +60,7 @@ The steps are as follows:
 <listitem><para>Open the <menuchoice><guimenu>Compute
 </guimenu></menuchoice> tab on the left side</para></listitem>
 
-<listitem><para>Select <menuchoice><guimenu>Access &amp; Security
+<listitem><para>Select <menuchoice><guimenu>Key Pairs
 </guimenu></menuchoice></para></listitem>
 
 <listitem><para>In the <menuchoice><guimenu>Key Pairs</guimenu></menuchoice> 
@@ -121,7 +117,7 @@ The steps are as follows:
 <listitem><para>Open the <menuchoice><guimenu>Compute
 </guimenu></menuchoice> tab on the left side</para></listitem>
 
-<listitem><para>Select <menuchoice><guimenu>Access &amp; Security
+<listitem><para>Select <menuchoice><guimenu>Key Pairs
 </guimenu></menuchoice></para></listitem>
 
 <listitem><para>In the <menuchoice><guimenu>Key Pairs</guimenu></menuchoice> 
@@ -149,7 +145,7 @@ Be careful not to paste the content of your private key, the one without the '.p
 </para></warning>
 
 <para>
-You can now choose your key pair when installing a VM as an access method.
+You can now use your key pair when instantiating  a VM as an access method.
 </para>
 
 </section>
@@ -167,7 +163,7 @@ the security group to be used.
 </para>
 <para>
 To set such IP rules, users can either add them to the <replaceable>default</replaceable> security group 
-or can create a new security group with the desided rules.
+or can create a new security group with the desired rules.
 </para>
 
 <para>
@@ -187,9 +183,8 @@ rules to a project, if needed.
 
 <listitem><para>
 Log in to the dashboard, choose a project, and click 
-<menuchoice><guimenu>Compute</guimenu><guisubmenu>Access &amp; Security</guisubmenu></menuchoice>. The 
-<menuchoice><guimenu>Security Groups</guimenu></menuchoice> tab shows the security 
-groups that are available for this project.
+<menuchoice><guimenu>Network</guimenu><guisubmenu>Security Groups</guisubmenu></menuchoice>. The 
+security groups that are available for this project are shown.
 </para></listitem>
 
 <listitem><para>
@@ -281,13 +276,16 @@ have a password <replaceable>that you cannot change with this procedure.</replac
 You need to use this procedure only if:
 <itemizedlist>
    <listitem><para>
-      You access the cloud through username and password and you want to change that password;
+      You access the cloud through username and password and you want to set/change that password;
    </para></listitem>
    <listitem><para>
-      You want to use the cloud resources through command line (see <xref linkend="AccessingtheCloudthroughCLI"/> ).
+      You want to use the cloud resources through the command line (see <xref linkend="AccessingtheCloudthroughCLI"/> ).
    </para></listitem>
 </itemizedlist>
 </para>
+
+
+
 </section>
 
 <section id="SettingPassword">
@@ -343,6 +341,7 @@ To switch between projects just open the dropdown menu
 <section id="AccessingtheCloudthroughCLI">
 <title>Accessing the Cloud with command line tools</title>
 <para>
+TBC
 It is possible to manage the Cloud using command line tools, 
 even if most of the functionality provided by 
 the Cloud can be accessed through the dashboard web interface.

@@ -574,7 +574,50 @@ change their role.
 <title>Manage account renewals (only for project managers)</title>
 
 <para>
-TBC
+When the affiliation of a user for a project is expiring,
+as manager of that project you will receive an e-mail such as this one:
+</para>
+
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/email_renewreq.png" />
+  <imagedata condition="pdf" fileref="./images/email_renewreq.png" width="450" />
+</imageobject>
+</mediaobject>
+
+
+<para>
+To renew the affiliation for that user, open the OpenStack web dashboard, log in, and then 
+access
+<menuchoice><guimenu>Identity</guimenu><guisubmenu>Subscriptions</guisubmenu></menuchoice>.
+An image such as the following one will appear:
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/renew_acc.png" />
+  <imagedata condition="pdf" fileref="./images/renew_acc.png" width="450" />
+</imageobject>
+</mediaobject>
+</para>
+
+<para>
+Click on the 
+<menuchoice><guimenu>Renew</guimenu></menuchoice> button
+(in <menuchoice><guimenu>Actions</guimenu></menuchoice>).
+A window, such as the one represented in the following image will appear:
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/renew_setdate.png" />
+  <imagedata condition="pdf" fileref="./images/renew_setdate.png" width="450" />
+</imageobject>
+</mediaobject>
+</para>
+
+<para>
+Set the new expiration date and then click the <menuchoice><guimenu>OK</guimenu></menuchoice> button.
+
 </para>
 
 </section>
