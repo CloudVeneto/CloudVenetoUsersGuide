@@ -341,13 +341,17 @@ To switch between projects just open the dropdown menu
 <section id="AccessingtheCloudthroughCLI">
 <title>Accessing the Cloud with command line tools</title>
 <para>
-TBC
 It is possible to manage the Cloud using command line tools, 
 even if most of the functionality provided by 
 the Cloud can be accessed through the dashboard web interface.
 The <ulink url="http://docs.openstack.org/cli-reference/">documentation</ulink> on the OpenStack site
 contains extended information on the syntax and installation procedure of the command line tools.
 </para>
+
+<note><para>
+INFN Padova users can find the OpenStack client installed on lx.pd.infn.it.
+</para></note>
+
 
 <important><para>
 Command line tools can only be used with the Cloud "internal" authentication
@@ -358,18 +362,21 @@ it's now time to <link linkend="PasswordOnlyIf">set a password.</link>
 <para>
 The OpenStack tools require a set of shell environment variables in order to 
 run. These variables can be obtained from the dashboard and then stored in an 'rc' file
-that you can source (much like your .profile) when logging into a linux server.
+that you can source (much like your .profile when logging into a linux server).
 </para>
 
 <para>The environment variables are different for project you work on.</para>
 
 <para>If you log into the dashboard, you 
-will find an <menuchoice><guimenu>Access &amp; Security</guimenu></menuchoice>
+will find <menuchoice><guimenu>API Access</guimenu></menuchoice>
 under the <menuchoice><guimenu>Compute</guimenu></menuchoice> menu on the left hand side. 
-Choose the <menuchoice><guimenu>API Access</guimenu></menuchoice> Tab to select the 
-options related to using the program interfaces. Select the 
-<menuchoice><guimenu>Download OpenStack RC file</guimenu></menuchoice> option 
-to download the rc file for your current project. 
+</para>
+
+<para>
+Select among <menuchoice><guimenu>Download OpenStack RC file v2.0</guimenu></menuchoice> and 
+<menuchoice><guimenu>Download OpenStack RC file v3</guimenu></menuchoice>, to download the rc file 
+for your current project (v2.0 or v3).
+The v3 openrc file requires a quite recent version of the Openstack client .
 </para>
 
 <mediaobject>
@@ -379,25 +386,34 @@ to download the rc file for your current project.
 </imageobject>
 </mediaobject>
 
+<warning><para>
+Because of a bug, if you downloaded the v2.0 rc file, you have to edit it and replace "v3" with "v2.0" in the OS_AUTH_URL variable setting
+</para></warning>
+
+
 <para>
-This file should be 
-saved onto the machineyou want to run the commands from. If you use 
+This file is different for each of the projects you are working on.
+</para>
+
+<para>
+The downloaded rc file should be 
+saved onto the machine you want to run the commands from. If you use 
 csh rather than bash/zsh for your shell, you would need to create a new 
 version using <replaceable>setenv</replaceable> rather than <replaceable>export</replaceable>.
 </para>
 
 <para>
-In the CEDC cloud, since services are secured using SSL, you will need the
-<literal>cedc-chain.pem</literal> "certification authority" file. This file can be downloaded (zipped)
+Since the CloudVeneto services are secured using SSL, you will need the
+<literal>Digicert.pem</literal> "certification authority" file. This file can be downloaded
 
-<ulink url="https://cloud.cedc.csia.unipd.it/User_Guide/cedc-chain.zip">from here.</ulink> 
+<ulink url="https://raw.githubusercontent.com/CloudVeneto/CertCA/master/Digicert.pem">from here.</ulink> 
 </para>
 
 <para>Once you get the file you need to edit the RC file to set the
 <literal>OS_CACERT</literal> variable like this:
 
 <screen>
-export OS_CACERT=/etc/grid-security/certificates/cedc-chain.pem
+export OS_CACERT=/etc/grid-security/certificates/Digicert.pem
 </screen>
 
 </para>
@@ -407,21 +423,23 @@ you specify is consistent.</para></note>
 
 <para>
 To test it works, source the rc script file and enter your password to 
-authenticate. The OpenStack command line tools (nova for compute resources, 
-glance for images) can then be used, e.g.:
+authenticate. The OpenStack command line tools can then be used, e.g.:
 </para>
 <screen>
-$ . demo-openrc.sh 
-Please enter your OpenStack Password: 
-$ nova list
-+--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
-| ID                                   | Name                                        | Status | Task State | Power State | Networks             |
-+--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
-| d85a4221-b2cc-4bcd-8c56-af21afa8ce5c | Monitoring_Server                           | ACTIVE | -          | Running     |  demo_net=10.62.13.5 |
-| 60005bae-93df-454e-9e1f-07c3be27157c | MySQL_Server                                | ACTIVE | -          | Running     |  demo_net=10.62.13.6 |
-| 6cbb5ded-ba65-4850-8078-1e9f1836e7de | Server 6cbb5ded-ba65-4850-8078-1e9f1836e7de | ACTIVE | -          | Running     |  demo_net=10.62.13.2 |
-| 5ce6926a-2796-4dbd-82f2-d84ced6acf38 | Xrootd_Server                               | ACTIVE | -          | Running     |  demo_net=10.62.13.4 |
-+--------------------------------------+---------------------------------------------+--------+------------+-------------+----------------------+
+$ . SgaraPrj1-openrc.sh 
+Please enter your OpenStack Password for project SgaraPrj1 as user sgaravat@infn.it: 
+$ openstack server list
++--------------------------------------+--------------+--------+-------------------------+------------+
+| ID                                   | Name         | Status | Networks                | Image Name |
++--------------------------------------+--------------+--------+-------------------------+------------+
+| 89088351-90d8-4346-8ecf-ad08750b9d9a | tinies-uno-5 | ACTIVE | SgaraPrj1-lan=10.1.1.4  | cirros     |
+| 44d12ad6-cc7e-47c3-a6d5-5e2b7c32d542 | tinies-uno-4 | ACTIVE | SgaraPrj1-lan=10.1.1.17 | cirros     |
+| 02a40340-d238-4405-b5f3-3d38d9f9b485 | tinies-uno-3 | ACTIVE | SgaraPrj1-lan=10.1.1.12 | cirros     |
+| bc6098c7-6ec6-4ac1-8aee-9e1edb33836a | tinies-uno-2 | ACTIVE | SgaraPrj1-lan=10.1.1.6  | cirros     |
+| 1a1ab1b8-a3dd-401d-a8c2-cbd30b02e066 | tinies-uno-1 | ACTIVE | SgaraPrj1-lan=10.1.1.10 | cirros     |
+| 4e2c6cc7-bc1c-49a1-951e-10b567247588 | dasgara1-2   | ACTIVE | SgaraPrj1-lan=10.1.1.11 | cirros     |
++--------------------------------------+--------------+--------+-------------------------+------------+
+$ 
 </screen>
 
 <note><para>
