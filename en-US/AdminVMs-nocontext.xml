@@ -47,7 +47,7 @@ menu. This will display a list of VMs currently running in your project.
 
 
 <listitem><para>
-Select the <menuchoice><guimenu>"+ Launch Instance"</guimenu></menuchoice> 
+Select the <menuchoice><guimenu>"Launch Instance"</guimenu></menuchoice> 
 button. A new window appears. 
 
 <mediaobject>
@@ -70,8 +70,8 @@ machine you want to create.
 
 <listitem><para>
 <menuchoice><guimenu>Flavor</guimenu></menuchoice> is the size of the machine 
-you want to create. These are specified using VCPUs (number of virtual CPUs, 
-disk space for the system disk, size for the RAM memory). You are advised to
+you want to create. These are specified using VCPUs (number of virtual CPUs), 
+disk space for the system disk, size for the RAM memory. You are advised to
 start small (the flavor of a virtual machine can be changed 
 later if required). Flavors are discussed in <xref linkend="Flavors"/>.
 </para></listitem>
@@ -109,7 +109,8 @@ Switch to the
 
 <listitem><para>
 As <menuchoice><guimenu>Keypair</guimenu></menuchoice> 
-select the keypair you created. This will allow you to log in as root using 
+select the keypair you created. This will allow you to log to the VM (usually as root or
+as an account where you can get admin privileges via sudo) using 
 this SSH key.
 </para></listitem>
 
@@ -120,7 +121,7 @@ You can also specify the admin (usually root) password of the instance.
 <warning><para>
 Please note that setting the admin password is not guaranteed to 
 always work (the image can't 
-support the “injection” of this password). It is therefore strongly suggested to use 
+support the “injection” of this password). It is therefore strongly suggested to rely on
 the ssh-key mechanisms.
 </para></warning>
 
@@ -152,6 +153,9 @@ was requested for your project,
 also another network called 
 <replaceable>&lt;ProjectName&gt;-wan</replaceable>.
 Select the former one if your VM doesn't need to be visible on the Internet. 
+</para>
+
+<para>
 Select instead the <replaceable>&lt;ProjectName&gt;-wan</replaceable>  
 network if your VM must have a public IP. You will then need to allocate a 
 public (floating) IP address to this instance, as explained in 
@@ -178,8 +182,8 @@ should be 'Active' once the install is complete.
 <para>
 Once the status of the machine is 'Active', you can watch the console to see 
 it installing and booting. You can click on the VM name and go to a dedicated
-window or from this same table you can access a pull down menu on the right hand side under 
-<menuchoice><guimenu>More</guimenu></menuchoice>.
+window or from this same table you can access a pull down menu on the right hand side
+under <menuchoice><guimenu>Actions</guimenu></menuchoice>.
 There you will see various options and among them
 <menuchoice><guimenu>View Log</guimenu></menuchoice> and 
 <menuchoice><guimenu>Console</guimenu></menuchoice>. 
@@ -204,6 +208,8 @@ console of the VM.
 
 <para>
 <warning><para>
+TBC
+
 Please note that cloud VMs are not registered in the DNS, and therefore
 you must use their IP address.
 </para></warning>

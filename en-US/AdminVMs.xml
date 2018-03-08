@@ -47,7 +47,7 @@ menu. This will display a list of VMs currently running in your project.
 
 
 <listitem><para>
-Select the <menuchoice><guimenu>"+ Launch Instance"</guimenu></menuchoice> 
+Select the <menuchoice><guimenu>"Launch Instance"</guimenu></menuchoice> 
 button. A new window appears. 
 
 <mediaobject>
