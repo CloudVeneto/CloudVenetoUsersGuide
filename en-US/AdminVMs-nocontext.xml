@@ -481,7 +481,6 @@ You can now specify 2002,2003 or 2010 after '-P' to get to the chosen VM.
 <section id="PublicAccess">
 <title>Giving a VM public access (getting a floating IP)</title>
 <para>
-TBC
 If needed, e.g. if a VM should host a service accessible from the 
 Internet, such VM on the Cloud can be given a public IP. For this purpose
 you will need:
@@ -506,7 +505,8 @@ to allocate a floating (public) IP to the VM, as discussed in
 <note><para>
 Please note that by default the possibility to use public IP numbers is disabled.
 If public IPs are needed for your project, please contact 
-<email>support@cloudveneto.it</email>.                
+<email>support@cloudveneto.it</email>, specifying what is/are the relevant service(s) and the 
+port(s) that need to be open.
 </para></note>
 
 <para>
@@ -539,8 +539,9 @@ services hosted in Padova or Legnaro from the Cloud, please contact
 
 
 <para>
-When an instance is created in OpenStack, it is automatically assigned a 
-fixed IP address.
+TBC
+When an instance is created in the Cloud, it is automatically assigned a 
+fixed private IP address.
 If a VM needs to be visible on the Internet, in addition to the fixed IP 
 address a public (floating) IP address must be attached to the instance.
 Floating IP addresses can have their associations modified at any time, 
