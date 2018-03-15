@@ -919,9 +919,8 @@ Documentation</ulink>.
 <title>Resizing Virtual Machines</title>
 
 <para>
-TBC
 If the size of a virtual machine needs to be changed, such as adding more 
-memory or cores, this can be done using the resize operations. Using resize, 
+memory or cores, this can be done using the resize operation. Using resize, 
 you can select a new flavor for your virtual machine. The operation will 
 reboot the virtual machine and might take several minutes of downtime, so this 
 operation should be planned as it will lead to application downtime.
@@ -943,7 +942,7 @@ Failure in doing so might lead to VM and/or Volume corruption!
 
 <listitem><para>Select the <menuchoice><guimenu>Compute</guimenu><guisubmenu>Instances</guisubmenu></menuchoice> 
 menu and then <menuchoice><guimenu>Resize Instance</guimenu></menuchoice> 
-option on the actions.
+option on the Actions.
 </para></listitem>
 
 <listitem><para>
