@@ -46,7 +46,7 @@ storage is defined in the virtual machine flavor.
 
 <para>
 Among the flavor details (that are listed in the Dashboard when a VM has to 
-be launched or can be seen using the <command>nova flavor-list</command> 
+be launched or can be seen using the <command>openstack flavor list</command> 
 command), there is an attribute called 'Ephemeral'. When you use a flavor 
 with an ephemeral disk size different from zero, the instance is booted with 
 an extra virtual disk whose size is indicated by the ephemeral value. 
@@ -71,6 +71,11 @@ may be detached or re-attached to a different instance while retaining all
 data, much like a USB drive.
 </para>
 
+<warning><para>
+Please note that backups are not performed on volumes.
+</para></warning>
+
+
 <section id="CreateVolumes">
 <title>Create a Volume</title>
 <para>
@@ -88,12 +93,85 @@ As <menuchoice><guimenu>Volume Source</guimenu></menuchoice> specify “No sourc
 
 <mediaobject>
 <imageobject>
-  <imagedata condition="web" fileref="./images/testvolCreation.jpg" />
-  <imagedata condition="pdf" fileref="./images/testvolCreation.jpg" width="450" />
+  <imagedata condition="web" fileref="./images/create_volume.png" />
+  <imagedata condition="pdf" fileref="./images/create_volume.png" width="450" />
+</imageobject>
+</mediaobject>
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/testvolCreation.png" />
+  <imagedata condition="pdf" fileref="./images/testvolCreation.png" width="450" />
 </imageobject>
 </mediaobject>
 
 </para>
+
+<para>    
+Multiple volume types exist, and you need to specify the
+type to be used for the volume to be created.
+</para>
+
+<note><para>
+If you are a University of Padova user, please select the <replaceable>ceph</replaceable> 
+volume type. 
+</para>
+
+<para>
+If you are a INFN user, please select the <replaceable>ceph</replaceable> volume type
+(the default) unless you have been told by the cloud administrator to use another volume type.
+</para></note>
+
+<para>                                                                                       
+In general different                    
+quotas for the different volume types are set.  
+Unfortunately the OpenStack dashboard shows only the overall quota. To see the quota         
+per each volume type you need to use the OpenStack CLI (as explained in                      
+<xref linkend="AccessingtheCloudthroughCLI"/>) and run the                                   
+<literal>cinder quota-usage ${OS_PROJECT_ID}</literal> command.                              
+</para>
+
+<para>                                                                                       
+E.g.:                                                                                        
+                                                                                             
+<screen> 
+$ cinder quota-usage ${OS_PROJECT_ID}
++----------------------------+--------+----------+-------+
+| Type                       | In_use | Reserved | Limit |
++----------------------------+--------+----------+-------+
+| backup_gigabytes           | 0      | 0        | 1000  |
+| backups                    | 0      | 0        | 10    |
+| gigabytes                  | 72     | 0        | 400   |
+| gigabytes_ceph             | 48     | 0        | 200   |
+| gigabytes_equallogic-unipd | 24     | 0        | 200   |
+| gigabytes_iscsi-infnpd     | 0      | 0        | 0     |
+| per_volume_gigabytes       | 0      | 0        | 5000  |
+| snapshots                  | 0      | 0        | 10    |
+| snapshots_ceph             | 0      | 0        | -1    |
+| snapshots_equallogic-unipd | 0      | 0        | -1    |
+| snapshots_iscsi-infnpd     | 0      | 0        | -1    |
+| volumes                    | 8      | 0        | 10    |
+| volumes_ceph               | 4      | 0        | -1    |
+| volumes_equallogic-unipd   | 4      | 0        | -1    |
+| volumes_iscsi-infnpd       | 0      | 0        | -1    |
++----------------------------+--------+----------+-------+
+$ 
+</screen>
+</para>
+
+
+<para>                                                                                       
+In this example the project was given 400 GB. For the ceph and equallogic-unipd
+volume types the quota is 200 GB, while it is not possible to create a volume
+using the iscsi-infnpd volume type.                                          
+</para>
+
+<warning><para>                                                                              
+If you try to create a volume using a type for which the quota is over,                      
+you will see a generic 'Unable to create volume' error message.                              
+</para></warning>
+
+
 </section>
 
 <section id="AttachVolume">
@@ -106,13 +184,13 @@ The new defined volume will appear in the
 <para>
 To attach this volume to an 
 existing instance, click on 
-<menuchoice><guimenu>More</guimenu><guisubmenu>Edit attachments</guisubmenu></menuchoice> ... 
+<menuchoice><guimenu>Actions</guimenu><guisubmenu>Manage Attachments</guisubmenu></menuchoice> ... 
 
 
 <mediaobject>
 <imageobject>
-  <imagedata condition="web" fileref="./images/AttachVolumeToInstance.jpg" />
-  <imagedata condition="pdf" fileref="./images/AttachVolumeToInstance.jpg" width="450" />
+  <imagedata condition="web" fileref="./images/AttachVolumeToInstance.png" />
+  <imagedata condition="pdf" fileref="./images/AttachVolumeToInstance.png" width="450" />
 </imageobject>
 </mediaobject>
 
@@ -168,7 +246,7 @@ umount /mnt
 <para>
 Then, using the Dashboard, click on 
 <menuchoice><guimenu>Volumes</guimenu></menuchoice>, click on 
-<menuchoice><guimenu>More</guimenu><guisubmenu>Edit attachments</guisubmenu></menuchoice> for the relevant 
+<menuchoice><guimenu>More</guimenu><guisubmenu>Manage Attachments</guisubmenu></menuchoice> for the relevant 
 volume and select <menuchoice><guimenu>Detach Volume</guimenu></menuchoice>. 
 The detached volume can then be associated to another VM, as described above 
 (you won't have to re-create the file system, otherwise you will lose the 
@@ -198,12 +276,8 @@ volume and then select
 </para></listitem>
 
 </itemizedlist>
-
-
-<warning><para>
-Please note that backups are not performed on volumes.
-</para></warning>
 </section>
+
 
 <section id="SharingVolume">
 <title>Sharing a volume between multiple (virtual) machines </title>
@@ -221,7 +295,7 @@ Cloud (and/or with other hosts) using NFS.
 		<listitem>
 			<para>
 			Once a volume has been created, formatted and attached to this instance
-			(see <xref linkend="Volumes"/> for details) acting as NFS server, create the mount point and mount the 
+			acting as NFS server, create the mount point and mount the 
 			volume on this virtual machine:
 <screen>
 mkdir /dataNfs
@@ -261,15 +335,42 @@ Filename    : /usr/sbin/rpc.nfsd
 		<listitem>
 			<para>
 			Insert the correct export directive in the /etc/exports file. For example 
-			if the volume must be visible to 
+			if the volume must be visible in read-only mode to
 			all the virtual machines of the same subnet 10.67.1.* (check the subnet with 
 			the <command>ifconfig</command> command) the content of the /etc/exports file 
 			will be:
 <screen>
-/dataNfs 10.67.1.*(async,rw,no_root_squash)
+/dataNfs 10.67.1.*(ro,no_root_squash)
 </screen>
             Note that there are no spaces between the '*' and the '('.
 			</para>
+                        <para>
+If the volume must be visible in read-write to all the virtual machines of the same subnet 
+10.67.1.*, you                                                                               
+might export it using the async or sync option.                                              
+In short: async is much faster wrt sync, but can lead to data corruption if the server crashes 
+during write operations                                                                   
+(async means that the NFS server will acknowledge data                                       
+before it's committed to disk, while sync does the opposite: the server will only acknowledge 
+data after it's written out). Sync can be slow in particular                               
+when you have to write many files, since the open()/creat()                                  
+and close() system calls have to wait for the new data to hit disk. 
+			</para>
+
+<para>                                                                                       
+To export a volume using the async option the /etc/exports will be something like:           
+<screen>                                                                                     
+/dataNfs 10.67.1.*(async,rw,no_root_squash)                                                 
+</screen>
+</para>
+
+<para>                                                                                       
+To export a volume using the sync option the /etc/exports will be something like:            
+<screen>                                                                                     
+/dataNfs 10.67.1.*(sync,rw,no_root_squash)                                                  
+</screen>
+</para>
+
 		</listitem>
 		<listitem>
 			<para>
@@ -384,15 +485,29 @@ Filename    : /sbin/mount.nfs
 mount -t nfs 10.67.1.4:/dataNfs /mnt
 </screen>
 			</para>
-			<note><para>
-			Please note that this procedure can be used to mount a volume also on hosts
-			outside the Cloud: it is sufficient to specify the IP address of these
-			hosts in the /etc/exports file on the instance acting as NFS server.
-			</para></note>
 		</listitem>
 	</orderedlist> <!-- configure client -->
 </listitem>
 </orderedlist>
+
+<warning><para>                                                                              
+It is highly suggested that the VM acting as NFS server is instantiated with                 
+ enough resources                                                                            
+(at least 2 VCPUs and 4 GB of RAM). Moreover it should be used only for                      
+hosting the NFS server (i.e. it shouldn't be used for other activities).                     
+</para></warning>
+
+
+<note><para>
+			Please note that this procedure can be used to mount a volume also on hosts
+			outside the Cloud: it is sufficient to specify the IP address of these
+			hosts in the /etc/exports file on the instance acting as NFS server.
+</para></note>
+
+
+
+
+
 
 </section>
 </section>
@@ -403,19 +518,12 @@ mount -t nfs 10.67.1.4:/dataNfs /mnt
 
 <para>
 As explained in <xref linkend="NetworkAccess"/> from an instance of the Cloud
-by default it is not possible to access a host/service hosted in Padova or 
+by default it is not possible to access a host/service hosted in INFN Padova or 
 Legnaro. This also means that by default on a virtual machine of
 the CloudVeneto it is not possible to mount a file system 
-exported from a storage server hosted in Padova or Legnaro.
+exported from a storage server hosted in INFN Padova or Legnaro.
 </para>
 
-<para>
-Accessing a storage system external to the Cloud from a virtual machine
-in an efficient way require some non negligible effort with respect 
-to network configuration. 
-If however there is such need,
-please contact <email>support@cloudveneto.it</email>.
-</para>
 
 </section>
 
