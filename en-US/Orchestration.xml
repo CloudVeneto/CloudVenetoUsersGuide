@@ -15,7 +15,7 @@ and other cloud services in an automated fashion.
 <para>
 In Heat parlance, a <literal>stack</literal> is the collection of 
 objects, or <literal>resources</literal>, that will be created by Heat. 
-This might include instances (VMs), networks, subnets, routers, ports,
+This might include instances (VMs), volumes, networks, subnets, routers, ports,
 security groups, security group rules, etc.
 </para>
 
@@ -177,7 +177,7 @@ outputs:
 
 
 <para>
-Heat templates allows also to insert user data via cloud-init, e.g:
+Heat templates allow also to insert user data via cloud-init, e.g:
 </para>
 
 <screen>
