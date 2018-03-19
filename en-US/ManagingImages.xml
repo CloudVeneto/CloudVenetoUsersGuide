@@ -16,8 +16,9 @@ the Glance OpenStack component.
 <para>
 Some images in the CloudVeneto are provided by the Cloud 
 administrators. These images are public, and visible to all users.
-They appear in the <menuchoice><guimenu>Public</guimenu></menuchoice> 
-tab of the <menuchoice><guimenu>Images</guimenu></menuchoice> 
+They appear with <replaceable>Visibility</replaceable> equal to 
+<replaceable>Public</replaceable>
+in the <menuchoice><guimenu>Compute</guimenu><guisubmenu>Images</guisubmenu></menuchoice>
 menu.
 
 <mediaobject>
@@ -30,17 +31,70 @@ menu.
 </para>
 
 <para>
-In the CloudVeneto cloud images are provided in QCOW2 format.
+In the CloudVeneto cloud images are usually provided in QCOW2 format.
 They are fully resizable also with respect to the disk size.
 </para>
 
+
+<section id="INFNPAdovaPublicImages">
+<title>Public Images for INFN Padova users</title>
+<para>
+The <literal>SL6x-INFNPadova-x86-64-&lt;date&gt;</literal> and                               
+<literal>CentOS7x-INFNPadova-x86-64-&lt;date&gt;</literal> images                            
+are basic SL6.x / CentOS 7.x images which                                                    
+also include cloud-init to perform contextualization based on the user data                  
+specified when the VM are instantiated. They also configure CVMFS and the                    
+relevant squid servers.                                                                      
+</para>
+
+<para>                                                                                       
+Such images also configure the                                                               
+Padova LDAP server for user authentication. This means that it is just                       
+necessary to “enable” the relevant accounts on the VM adding in the                          
+/etc/passwd file:                                                                            
+                                                                                             
+<screen>                                                                                     
++name1::::::                                                                                 
++name2::::::                                                                                 
+...                                                                                          
+</screen>                                                                                    
+and creating their home directories.                                                         
+</para>
+<para>                                                                                       
+Changes done in /etc/passwd could not be applied immediately by the system.                  
+In this case a:                                                                              
+                                                                                             
+<screen>                                                                                     
+nscd -i passwd                                                                               
+</screen>                                                                                    
+                                                                                             
+should help.                                                                                 
+</para>
+
+
+<note>
+<para>                                                                                       
+The <literal>SL6x-INFNPadova-x86-64-&lt;date&gt;</literal> and                               
+<literal>CentOS7x-INFNPadova-x86-64-&lt;date&gt;</literal> images                            
+also allow INFN-Padova system administrators                                                 
+to log (with admin privileges) on the instance.                                              
+</para>
+<para>
+<ulink url="http://www.pd.infn.it/calcolo/indexEN.html">INFN-Padova computing and Network service</ulink>                                                                                
+(<email>supporto@pd.infn.it</email>) can provide support only for                            
+instances created using such images (only to INFN-Padova users).                             
+</para>
+</note>
+
+
+</section>
 
 </section>
 
 <section id="UserProvidedImages">
 <title>User Provided Images</title>
 <para>
-Along with the standard images, users can provide their own images
+Users can provide their own images
 and upload them to the Cloud Image service:
 these images are private, meaning that they are only available to the users 
 of the project they are uploaded for.
@@ -49,16 +103,6 @@ of the project they are uploaded for.
 <note><para>
 Users are not allowed to publish public (i.e. available to all projects) 
 images.
-This means you cannot use the <literal>--public</literal> flag
-with the <literal> glance image-create</literal> command, otherwise you will 
-get a quite cryptic error message such as:
-
-<screen>
-Request returned failure status.
-403 Forbidden
-Access was denied to this resource.
-    (HTTP 403)
-</screen>
 </para></note>
 
 
@@ -87,9 +131,9 @@ $ . demo-openrc.sh
    </para></listitem>
    <listitem><para>Issue th following command:
       <screen>
-$ glance image-create --name=ubuntu-trusty --disk-format=qcow2 \
-      --container-format=bare --property hypervisor_type=qemu \
-      --file trusty-server-cloudimg-amd64-disk1.img
+$ openstack image create --private --disk-format=qcow2 \
+      --container-format=bare \
+      --file trusty-server-cloudimg-amd64-disk1.img ubuntu-trusty
       </screen>
    </para></listitem>
 </itemizedlist>
@@ -103,8 +147,8 @@ For example, these steps show how to create an image from the Freedos ISO
 available from <ulink url="http://www.freedos.org/download/download/fd11src.iso">here</ulink>
 
 <screen>
-$ glance image-create --name freedos11 --disk-format=iso \
---container-format=bare --file=fd11src.iso
+$ openstack image create --private --disk-format=iso \
+--container-format=bare --file=fd11src.iso freedos11
 </screen>
 </para>
 
@@ -139,66 +183,105 @@ possible via the command line tools.
 If an image has been uploaded to your currently active project, using the
 procedure described in 
 <xref linkend="UserProvidedImages"/>, 
-you can then use the <command>glance member-create</command> operations to 
+you can then use the <command>openstack image add project</command> operation to 
 share that image with another project.
 </para>
 
 <para>
 To share an image, first source the project profile for the 
-project containing the image you want to share and find its id with
-the <command>glance image-show</command> command
-(e0d35322-d509-4202-9b40-7d74e7aca0b6 in the 
+project containing the image you want to share (e.g. Fedora-Cloud-Base-27)
+and find its id with
+the <command>openstack image list</command> command
+(d4b02b71-755e-47ad-bb27-1ea5c23bf7cb in the 
 example):
 
 <screen>
-$ glance image-show ubuntu-trusty
-+----------------------------+--------------------------------------+
-| Property                   | Value                                |
-+----------------------------+--------------------------------------+
-| Property 'hypervisor_type' | qemu                                 |
-| checksum                   | 2538873a402068e7c48ba5e0b896d222     |
-| container_format           | bare                                 |
-| created_at                 | 2014-10-25T05:06:13                  |
-| deleted                    | False                                |
-| disk_format                | qcow2                                |
-| id                         | e0d35322-d509-4202-9b40-7d74e7aca0b6 |
-| is_public                  | False                                |
-| min_disk                   | 0                                    |
-| min_ram                    | 0                                    |
-| name                       | ubuntu-trusty                        |
-| owner                      | beaeede3841b47efb6b665a1a667e5b1     |
-| protected                  | False                                |
-| size                       | 255853056                            |
-| status                     | active                               |
-| updated_at                 | 2014-10-25T05:07:01                  |
-+----------------------------+--------------------------------------+
+$ openstack image list
++--------------------------------------+----------------------+--------+
+| ID                                   | Name                 | Status |
++--------------------------------------+----------------------+--------+
+| 7ebe160d-5498-477b-aa2e-94a6d962a075 | CentOS7              | active |
+| d4b02b71-755e-47ad-bb27-1ea5c23bf7cb | Fedora-Cloud-Base-27 | active |
+| 071668fc-dfeb-4956-996a-d2a487755709 | cirros               | active |
++--------------------------------------+----------------------+--------+
+
 </screen>
 
 </para>
+
+<para>
+You then need to change (to 'Shared' the visibility of the image:
+
+<screen>
+openstack image set --property visibility=shared d4b02b71-755e-47ad-bb27-1ea5c23bf7cb
+</screen>
+
+</para>
+
 
 <para>
 You now need to find the id of the project you wish to share the image with. 
 This will generally be done by looking at the openrc file of that project and 
-finding the <literal>OS_TENANT_ID</literal> variable (in this example, it is 
-65bf648d-8d07-48af-8c3a-fa162a5b283f).
+finding the <literal>OS_PROJECT_ID</literal> variable (in this example, it is 
+e81df4c0b493439abb8b85bfd4cbe071).
 </para>
 
 <para>
-Using this tenant ID as an argument of the command line of 
-<command>member-create</command>, the image 
-(e0d35322-d509-4202-9b40-7d74e7aca0b6
-in this example) can then be shared:
+To share the image with id d4b02b71-755e-47ad-bb27-1ea5c23bf7cb
+to the project whose is is e81df4c0b493439abb8b85bfd4cbe071, use the command:
 
 <screen>
-glance  member-create e0d35322-d509-4202-9b40-7d74e7aca0b6 65bf648d-8d07-48af-8c3a-fa162a5b283f # share it
- 
-glance member-list --image-id e0d35322-d509-4202-9b40-7d74e7aca0b6 # check it is shared
+$ openstack image add project d4b02b71-755e-47ad-bb27-1ea5c23bf7cb e81df4c0b493439abb8b85bfd4cbe071 
++------------+--------------------------------------+
+| Field      | Value                                |
++------------+--------------------------------------+
+| created_at | 2018-03-19T16:09:21Z                 |
+| image_id   | d4b02b71-755e-47ad-bb27-1ea5c23bf7cb |
+| member_id  | e81df4c0b493439abb8b85bfd4cbe071     |
+| schema     | /v2/schemas/member                   |
+| status     | pending                              |
+| updated_at | 2018-03-19T16:09:21Z                 |
++------------+--------------------------------------+
+</screen>
+</para>
+
+<para>
+A member of the target project (with id e81df4c0b493439abb8b85bfd4cbe071 in our example)
+needs to accept the image in order to be available in the images list:
+
+<screen>
+$ openstack image set --accept d4b02b71-755e-47ad-bb27-1ea5c23bf7cb
 </screen>
 
 </para>
 
+<para>
+In the target project, the image will appear in the image list:
+
+<mediaobject>
+<imageobject>
+  <imagedata condition="web" fileref="./images/SharedImage.png"/>
+  <imagedata condition="pdf" fileref="./images/SharedImage.png" width="450" />
+</imageobject>
+</mediaobject>
+
+</para>
 </section>
 
+<section id="BuildingImages">
+<title>Building Images</title>
+<para>                                                                                       
+Users can also build custom images, that can then been uploaded in                           
+the Cloud Image service as described in                                                      
+<xref linkend="UserProvidedImages"/>.                                                        
+</para>
+<para>                                                                                       
+There are several tools providing support for image creation. Some of them                   
+are described in the 
+<ulink url="http://docs.openstack.org/image-guide/content/ch_creating_images_automatically.html">Openstack documentation</ulink>.                                   
+</para>
+
+</section>
 
 <section id="DeletingImages">
 <title>Deleting Images</title>
