@@ -7,6 +7,7 @@
 <title>Creating Batch Clusters on the Cloud</title>
 
 <para>
+TBC
   The virtual machines provided by the CloudVeneto cloud platform can also be used to
   implement batch clusters where users can run their jobs.
 </para>

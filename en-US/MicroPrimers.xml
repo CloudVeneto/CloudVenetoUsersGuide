@@ -660,4 +660,115 @@ root@maz03:~# nano /etc/fstab
 The system will lookup in /etc/fstab and mount the correct volume corresponding to the /mnt/volume1 mount point.</para>
 </section>
 
+<section id="EnablingINFNPadovaLDAP">
+<title>Enabling INFN Padova LDAP based authentication on the Virtual Machine</title>
+
+<para>                                                                                       
+When creating a custom image, it might be needed to enable a LDAP server                     
+to manage authentication for users.                                                          
+                                                                                             
+This section explains how to enable the INFN Padova's LDAP server for user                   
+authentication on the VMs of the Cloud.                                                      
+                                                                                             
+To do that, the following LDAP client configurations, targeted to SL6.x                      
+systems, need to be available on the image used to start the VMs.                            
+</para>
+
+<para>                                                                                       
+First of all, the following packages must be installed:   
+<itemizedlist>
+<listitem><para>openssl</para></listitem>
+<listitem><para>openldap</para></listitem>
+<listitem><para>openldap-clients</para></listitem>
+<listitem><para>pam-ldap</para></listitem>
+<listitem><para>nss-pam-ldapd</para></listitem>
+<listitem><para>nss-tools</para></listitem>
+<listitem><para>nscd</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>                                                                                       
+Then the following files (included in this                                                   
+<ulink url="https://wiki.infn.it/_media/progetti/cloud-areapd/user_s_guides/ldap.tar">ldap.t\
+ar</ulink>                                                                                   
+tar file) must be                                                                            
+installed on the Virtual Machine: 
+<itemizedlist>
+
+<listitem><para>/etc/openldap/cacerts/cacert.pem</para></listitem>
+<listitem><para>/etc/openldap/ldap.conf</para></listitem>
+<listitem><para>/etc/pam_ldap.conf</para></listitem>
+<listitem><para>/etc/nsswitch.conf</para></listitem>
+<listitem><para>/etc/nslcd.conf</para></listitem>
+<listitem><para>/etc/pam.d/system-auth-ac</para></listitem>
+<listitem><para>/etc/pam.d/password-auth-ac</para></listitem>
+</itemizedlist>
+
+</para>
+<para>                                                                                       
+                                                                                             
+To do that, it is enough to log on the VM and:             
+<screen>                                                                                     
+cd /                                                                                         
+tar xvf / path/ldap.tar                                                                      
+</screen>
+</para>
+
+<para>                                                                                       
+Make sure that the following links exist:                                                    
+                                                                                             
+<screen>                                                                                     
+/etc/pam.d/password-auth -> password-auth-ac                                                 
+/etc/pam.d/system-auth -> system-auth-ac                                                     
+</screen>
+
+</para>
+
+
+<para>                                                                                       
+Then it is necessary to start the nslcd and nscd services:              
+<screen>                                                                                     
+service nslcd start                                                                          
+service nscd start                                                                           
+chkconfig nslcd on                                                                           
+chkconfig nscd on                                                                            
+</screen>
+</para>
+
+<para>                                                                                       
+Then it is just necessary to “enable” the relevant accounts on the VM adding                 
+in the /etc/passwd file:                                                                     
+                                                                                             
+<screen>                                                                                     
++name1::::::                                                                                 
++name2::::::                                                                                 
+...                                                                                          
+</screen>                                                                                    
+and creating their home directories.                                                         
+</para>
+<para>                                                                                       
+Changes done in /etc/passwd could not be applied immediately by the system.                  
+In this case a:                                                                              
+                                                                                             
+<screen>                                                                                     
+nscd -i passwd                                                                               
+should help.                                                                                 
+</screen>
+
+</para>
+
+<note><para>                                                                                 
+Please note that the <literal>SL6x-INFNPadova-x86-64-&lt;date&gt;</literal>                  
+and <literal>CentOS7x-INFNPadova-x86-64-&lt;date&gt;</literal> images                        
+have already the LDAP client                                                                 
+properly configured to use the Padova LDAP server.                                           
+Using these images it is just necessary to enable the                                        
+relevant users in /etc/passwd and create their home directories.                             
+</para></note>
+
+</section>
+
+
 </chapter>
