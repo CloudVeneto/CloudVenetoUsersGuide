@@ -11,13 +11,13 @@
 
 <para>
 <blockquote>
-<attribution>TBCWilliam Lamb, 2nd Viscount Melbourne</attribution>
+<attribution>William Lamb, 2nd Viscount Melbourne</attribution>
 <para>The possession of great power necessarily implies great responsibility.</para>
 </blockquote>
 </para>
 
 <para>
-The <literal>CloudVeneto</literal> provides an infrastructure where your virtual machines can live.
+<literal>CloudVeneto</literal> provides an infrastructure where your virtual machines can live.
 After you have activated your virtual machine(s) you are on your own for the most part of the day to day 
 administration tasks.
 </para>
@@ -660,6 +660,13 @@ root@maz03:~# nano /etc/fstab
 The system will lookup in /etc/fstab and mount the correct volume corresponding to the /mnt/volume1 mount point.</para>
 </section>
 
+<section id="AdminForINFNPadova">
+<title>Specific instructions relevant for INFN-Padova users</title>
+
+<para>
+In this section we discuss about some specific topics relevant only for INFN-Padova users.
+</para>
+
 <section id="EnablingINFNPadovaLDAP">
 <title>Enabling INFN Padova LDAP based authentication on the Virtual Machine</title>
 
@@ -770,5 +777,52 @@ relevant users in /etc/passwd and create their home directories.
 
 </section>
 
+<section id="Mathematica"><title>Install Mathematica (only for INFN Padova users)</title>
 
+<para>                                                                                                   
+INFN-Padova users can follow these instructions to install Mathematica on their Linux box.               
+</para>
+
+<para>                                                                                                   
+First of all log as root on your VM and mount the directory where the installation kit is available:     
+                                                                                                         
+<screen>                                                                                                 
+# mount hellgate.pd.infn.it:/sw/linux mnt/                                                               
+</screen>                                                                                                
+                                                                                                         
+                                                                                                         
+Go to the relevant directory and launch the installer:                                                   
+                                                                                                         
+<screen>                                                                                                 
+cd mnt/Mathematica/&lt;version&gt;/Installer/                                                            
+./MathInstaller                                                                                          
+</screen>                                                                                                
+                                                                                                         
+                                                                                                         
+The installer will ask the target installation directory (the default is                                 
+/usr/local/Wolfram/Mathematica/&lt;version&gt;) and the directory where the executables will be linked   
+(default /usr/local/bin).                                                                                
+</para>
+<para>                                                                                                   
+Finally create the file /usr/local/Wolfram/Mathematica/&lt;version&gt;/Configuration/Licensing/mathpass 
+with the following                                                                                       
+content:                                                                                                 
+                                                                                                         
+<screen>                                                                                                 
+!mathlm.pd.infn.it                                                                                       
+</screen>
+
+</para>
+
+<para>                                                                                                   
+That's all! You can now umount the /mnt directory:                                                       
+                                                                                                         
+<screen>                                                                                                 
+cd ; umount /mnt                                                                                         
+</screen>
+</para>
+</section>
+
+
+</section>
 </chapter>
