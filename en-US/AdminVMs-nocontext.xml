@@ -542,8 +542,36 @@ Click <menuchoice><guimenu>Allocate IP To Project (TBC nuova figura)</guimenu></
 </mediaobject>
 
 
-Choose the pool from which to pick the 
-IP address and click <menuchoice><guimenu>Allocate IP</guimenu></menuchoice> (TBC i 3 pool). 
+Choose the pool from which to pick the IP address.
+You must choose:
+
+<itemizedlist>
+
+
+<listitem><para>
+  <replaceable>INFN-WAN</replaceable>, if you are a INFN user 
+  (i.e. if the IP address of your instances is 10.64.x.y);
+</para>
+</listitem>
+
+<listitem><para>
+  <replaceable>Unipd-WAN</replaceable>, if you are referring to a University
+  of Padova project (i.e. if the IP address of your instances is 10.67.x.y);
+</para>
+</listitem>
+
+<listitem><para>
+  <replaceable>CloudVeneto-WAN</replaceable>, in all other cases
+  (i.e. if the IP address of your instances is 10.68.x.y).
+</para>
+</listitem>
+
+
+
+</itemizedlist>
+
+
+Then click <menuchoice><guimenu>Allocate IP</guimenu></menuchoice>. 
 </para></listitem>
 
 
