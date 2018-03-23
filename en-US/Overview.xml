@@ -92,7 +92,7 @@ If it is necessary to log on a VM of the Cloud from the Internet, it is
 necessary to go through a gate machine. For this purpose users can rely
 on the existing gate hosts in Padova and Legnaro. 
 Users who don't have an account on such gate hosts can rely on 
-a Cloud specific gate host (<literal>cld-gate.pd.infn.it</literal>): please contact 
+a Cloud specific gate host (<literal>gate.cloudveneto.it</literal>): please contact 
 <email>support@cloudveneto.it</email> if you need an account on such 
 machine.
 </para>
@@ -107,7 +107,7 @@ If this is the case please contact
 
 <listitem><para><literal>UNIPD users:</literal></para>
 <para>
-VM may be accessed from a gate (<literal>TBC</literal>): please contact
+VM may be accessed from a gate (<literal>gate.cloudveneto.it</literal>): please contact
 <email>support@cloudveneto.it</email> if you need an account on such
 machine.
 </para>
