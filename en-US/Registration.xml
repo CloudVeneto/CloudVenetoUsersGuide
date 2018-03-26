@@ -98,23 +98,22 @@ in the Dashboard. However this is not yet operational.
 
 
 <para>
-Once authenticated on your Identity Provider system, you will be redirected to a form like this (TBC fig):
+Once authenticated on your Identity Provider system, you will be redirected to a form like this:
 </para>
 
 <para>
 <mediaobject>
 <imageobject>
-  <imagedata condition="web" fileref="./images/RegisterFormAAI.png" />
-  <imagedata condition="pdf" fileref="./images/RegisterFormAAI.png" scale="50" />
+  <imagedata condition="web" fileref="./images/RegisterFormAAI.jpg" />
+  <imagedata condition="pdf" fileref="./images/RegisterFormAAI.jpg" scale="50" />
 </imageobject>
 </mediaobject>
 </para>
 
 <para>
-TBC
-Fill the form with the name of your organization (e.g. 'INFN Padova'),
-your phone number, the name of a contact person in Padova/Legnaro
-(e.g. your team leader), and if needed some notes.
+Fill the form with 
+your phone number, the name of a contact person
+(i.e. the reference person from your Department/Institution), and if needed some notes.
 </para>
 
 <para>
@@ -214,7 +213,7 @@ a small quota used to test the Cloud infrastructure.
 
 <para>
 When you have filled the form, please read the AUP that you need to accept (by clicking the 
-<menuchoice><guimenu>Accept</guimenu></menuchoice> button) to be allowed
+<menuchoice><guimenu>Accept AUP</guimenu></menuchoice> button) to be allowed
 to have an account.
 </para>
 
@@ -370,7 +369,7 @@ a small quota used to test the Cloud infrastructure.
 
 <para>
 When you have filled the form, please read the AUP that you need to accept (by clicking the 
-<menuchoice><guimenu>Accept</guimenu></menuchoice> button) to be allowed
+<menuchoice><guimenu>Accept AUP</guimenu></menuchoice> button) to be allowed
 to have an account.
 </para>
 
