@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="MiscellaneousTopics">
+<title>Miscellaneous topics</title>
+
+<section id="MigratingAnImageToAnotherCloud">
+<title>Migrating an image to another cloud</title>
+
+<para>                                                                                                                                                        Sometimes it becomes necessary to migrate an image (or snapshot) 
+from one OpenStack cloud to another one.
+</para>
+
+<para>
+In short the procedure is the following:
+</para>
+
+
+<para>
+<emphasis role="strong">In the source cloud:</emphasis>
+
+<itemizedlist>
+
+<listitem><para>
+Download the image/snapshot as a file
+</para></listitem>
+
+</itemizedlist>
+
+
+<emphasis role="strong">In the destination cloud:</emphasis>
+
+<itemizedlist>
+
+<listitem><para>
+Upload the downloaded image file to the new environment
+</para></listitem>
+
+
+</itemizedlist>
+</para>
+
+<para>
+To download the image from the source cloud, you need to use
+the OpenStack CLI. After having sourced the environment script 
+of the source cloud (as explained in                                                                                               
+<xref linkend="AccessingtheCloudthroughCLI"/>), run the <literal>openstack image list</literal>
+to find the id of the image (photo-slave in the following example):
+
+<screen>
+$ openstack image list | grep photo-slave
+| 753e8fa1-3f1b-407d-9294-d22b89ec3184 | photo-slave                 | active |
+</screen> 
+
+Then use the <literal>openstack image save</literal> command, using the relevant id, 
+to download the image file:
+
+<screen>
+$ openstack image save --file photo-slave.qcow2 753e8fa1-3f1b-407d-9294-d22b89ec3184
+</screen>
+
+</para>
+
+<para>
+To upload the image to the destination environment, first of all source the environment script
+of the target cloud. 
+</para>
+
+<para>
+Then run the <literal>openstack image create</literal> command:
+
+<screen>
+$ openstack image create --private --disk-format=qcow2 \         
+      --container-format=bare \                                                                                                               
+      --file photo-slave.qcow2 photo-slave
+</screen>
+
+</para>
+
+</section>
+
+
+<section id="MigratingAnInstanceToAnotherProjectCloud">
+<title>Migrating an instance to another project/cloud</title>
+<para>
+The migration of an instance from one
+project to another one, or to a different OpenStack cloud, can be done
+using snapshots.
+</para>
+
+<para>
+In short the procedure to migrate an instance is the following:
+</para>
+
+<para>
+
+<itemizedlist>
+
+<listitem><para>
+Create a snapshot of the instance in the source project (please refer to the instructions provided at 
+<xref linkend="SnapshottingVMs"/>).
+</para></listitem>
+
+
+<listitem><para>
+Transfer the snapshot from the source project to the destination one (this was discussed in the previous
+section: <xref linkend="MigratingAnImageToAnotherCloud"/>).
+</para></listitem>
+
+<listitem><para>
+In the target environment boot a new instance from the snapshot.
+</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+
+</section>
+
+</chapter>

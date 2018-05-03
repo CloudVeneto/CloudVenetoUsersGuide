@@ -1042,6 +1042,11 @@ the following instructions, once logged as root on the “source” VM:
 </screen>
 
 <para>
+You may safely ignore warnings raised by these commands (e.g. complaining that the files are missing)
+</para>
+
+
+<para>
 To save a snapshot of your VM:
 </para>
 
