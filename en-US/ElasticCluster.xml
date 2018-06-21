@@ -832,7 +832,7 @@ elastiq      953     952  0 14:09 pts/0    00:00:01 python /usr/bin/elastiq-real
       <para>
 	<itemizedlist>
 	  <listitem><para>You should be registered in the CloudVeneto as member of a project.</para></listitem>
-	  <listitem><para>You should be registered in the <ulink url="http://90.147.77.138:8899">IM service</ulink>.</para></listitem>
+	  <listitem><para>You should be registered in the <ulink url="http://90.147.77.138/im-web">IM service</ulink>.</para></listitem>
 	  <listitem><para>You need to download the <literal>ec3</literal> software. You can download them from <ulink url="https://github.com/grycap/ec3">github</ulink>. As explained in <xref linkend="ClusterConfiguration_ec3"/>, this will be used to instantiate the elastic cluster:
 	    <screen>
 $ git clone https://github.com/grycap/ec3
@@ -984,7 +984,7 @@ cd ec3/
 	    <literal>&lt;cluster_name&gt;</literal> is the name that you want to use for your cluster
 	  </para></listitem>
 	  <listitem><para>
-	    <literal>&lt;radl_file&gt;</literal> is the name of cluster configuration radl file
+	    <literal>&lt;radl_file&gt;</literal> is the name of cluster configuration radl file (without extension .radl)
 	  </para></listitem>
 	  <listitem><para>
 	    <literal>&lt;authentication_file&gt;</literal> is your authentication file edited as explained in <xref linkend="Prerequisites_ec3"/>
@@ -1054,7 +1054,7 @@ $ cat submit.sh
 #
 
 srun hostname
-srun sleep 60t
+srun sleep 60
 	</screen>
       </para>
       <para>
@@ -1073,9 +1073,6 @@ $ squeue
     </section>
     <section id="Troubleshooting_the_elastic_cluster_ec3">
       <title>Troubleshooting the elastic cluster</title>
-      <para>
-	<literal>Check the log files</literal>
-      </para>
       <para>
 	<literal>Check the running proceses</literal>
       </para>
