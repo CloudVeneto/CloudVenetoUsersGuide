@@ -976,7 +976,7 @@ system wn (
 	To instantiate the frontend node you have to use the ec3 command line.
 	<screen>
 cd ec3/
-./ec3 launch <literal>&lt;cluster_name&gt;</literal> <literal>&lt;radl_file&gt;</literal> -a <literal>&lt;authentication_file&gt;</literal> -u http://90.147.77.138:8899 -y --add "system wn ( ec3_max_instances = <literal>&lt;wns_number&gt;</literal> )
+./ec3 launch <literal>&lt;cluster_name&gt;</literal> <literal>&lt;radl_file&gt;</literal> -a <literal>&lt;authentication_file&gt;</literal> -u http://90.147.77.138:8899 -y --add "system wn ( ec3_max_instances = <literal>&lt;wns_number&gt;</literal> )"
 	</screen>
 	where
 	<itemizedlist>
@@ -993,6 +993,21 @@ cd ec3/
 	    <literal>&lt;wns_number&gt;</literal> is the max number of worker nodes that you want use in your cluster.
 	  </para></listitem>
 	</itemizedlist>
+      </para>
+      <para> 
+To check the list of active clusters:
+	<screen>
+./ec3 list
+      name           state           IP        nodes 
+-----------------------------------------------------
+   fhtcbelle2      configured    10.64.20.20     0   
+  non_firewall     configured   90.147.77.132    0   
+   test_slurm       running      10.64.15.12     0   
+        </screen>
+To destroy a cluster
+        <screen>
+./ec3 destroy <literal>&lt;cluster_name&gt;</literal> 
+        </screen>
       </para>
       <warning>
 	<para>	  
