@@ -155,7 +155,14 @@ $ git clone https://github.com/CloudPadovana/ECM.git
 	  </para></listitem>
 	  
 
-
+	  <listitem><para>
+            You need to install the euca2ools package to discover the EC2 (AMI) id of images.
+            Euca commands are also used by ECM to show the list of available images for the cluster.
+            <screen>
+yum install euca2ools (on RHEL/CentOS)
+apt-get install euca2ools (on Ubuntu)
+            </screen>
+	  </para></listitem>
 
 	</itemizedlist>
 
