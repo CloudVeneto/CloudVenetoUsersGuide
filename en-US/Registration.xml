@@ -152,7 +152,6 @@ have three options:
 <itemizedlist>
 <listitem><para>Select Existing Projects</para></listitem>
 <listitem><para>Create new project</para></listitem>
-<listitem><para>Use guest project</para></listitem>
 </itemizedlist>
 
 </para>
@@ -204,11 +203,6 @@ project should be done by the relevant experiment/group leader.
 </para>
 </note>
 
-<para>                                                                          
-Select <literal>Use guest project</literal> if you want to apply membership     
-for the guest project, i.e. the project with                                    
-a small quota used to test the Cloud infrastructure.                            
-</para>
 
 
 <para>
@@ -326,7 +320,6 @@ you have three options:
 <itemizedlist>
 <listitem><para>Select Existing Projects</para></listitem>
 <listitem><para>Create new project</para></listitem>
-<listitem><para>Use guest project</para></listitem>
 </itemizedlist>
 
 </para>
@@ -359,11 +352,6 @@ project should be done by the relevant experiment/group leader.
 </para></note>
 </para>
 
-<para>
-Select <literal>Use guest project</literal> if you want to apply membership
-for the guest project, i.e. the project with 
-a small quota used to test the Cloud infrastructure.
-</para>
 
 
 

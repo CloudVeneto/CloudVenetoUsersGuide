@@ -56,10 +56,6 @@ who is responsible to manage
 (accepting or refusing) membership requests for the project.                       
 </para>
 
-<para>                                                                             
-A special shared project, called <literal>guest</literal> is used for all other    
-users: it has a small quota to allow testing the Cloud infrastructure.             
-</para>
 
 <warning><para>                                                                
 <literal>Personal private</literal> projects are discouraged and are created only for 
