@@ -167,7 +167,9 @@ Select <literal>Create new project</literal> if instead you want to ask
 the creation of a new project (and you are the leader of the experiment/research 
 group associated to this project).
 In this case you will have to specify also
-a Project name and a Project Description. You will also have to specify
+a Project name and a Project Description. At the end of the Project Description you have to specify
+the Department / Institution your project belong to (i.e xxxx - INFN or xxxx - Biology Dept). 
+You will also have to specify
 if this project must be private (a personal project where you will
 be the only member) or not.
 </para>
