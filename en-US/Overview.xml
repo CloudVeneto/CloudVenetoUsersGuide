@@ -195,6 +195,18 @@ The following quote can be used:
 <para>"CloudVeneto is acknowledged for the use of computing and storage facilities."</para>
 </blockquote>
 </para>
+<para>
+References:
+
+<itemizedlist>
+
+<listitem><para>P. Andreetto et al.<literal>Merging OpenStack based private clouds: the case of 
+CloudVeneto.it</literal>, to appear in Proceedings of CHEP2018 conference</para></listitem>
+
+<listitem><para>Cloudveneto web site: http://cloudveneto.it</para></listitem>
+
+</itemizedlist>
+</para>
 <!--para>
 This technical report can also be used as a reference:
 <ulink url="http://paduaresearch.cab.unipd.it/9653/">Progetto CloudVeneto.it - Status Report.</ulink>

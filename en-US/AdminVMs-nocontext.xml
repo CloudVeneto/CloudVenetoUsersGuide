@@ -277,7 +277,9 @@ Complete the operation clicking on <replaceable>Create Volume</replaceable>.
 
 <note>
 <para>                                                                          
-Please select 'ceph' (the default) as type for the volume                       
+Please select 'ceph' (the default) as type for the volume.
+Unipd users will have to first contact <email>support@cloudveneto.it</email> 
+to require some disk space on the ceph storage backend. 
 </para>
 </note>
 <para>                                                                          
