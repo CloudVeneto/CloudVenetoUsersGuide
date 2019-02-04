@@ -234,8 +234,15 @@ this operation can live-migrate the instance to another Cloud compute
 node basically without any service interruption.                                
 </para>
 
+
+<para>
+On the other hand, I/O performance is usually better when the
+instance is created using the local disk of the compute node with respect to a virtual machine
+created from volume. 
+</para>
+
 <para>                                                                          
-The procedure is the following:                                                 
+The procedure to create a VM from volume is the following:                                                 
                                                                                 
 <itemizedlist>
 
