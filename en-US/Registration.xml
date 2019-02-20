@@ -178,7 +178,7 @@ be the only member) or not.
 Newly created projects will get a default quota of:
 <itemizedlist>
 <listitem><para>20 VCPU</para></listitem>
-<listitem><para>40 GB RAM</para></listitem>
+<listitem><para>20 GB RAM</para></listitem>
 <listitem><para>200 GB for Volume (e.g. non ephemeral) storage</para></listitem>
 </itemizedlist>
 Allocation of more resources for UniPD users must be approved by the Cloud UniPD "governance".
