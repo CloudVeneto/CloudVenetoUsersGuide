@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "Users_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="K8sCluster">
+  <title>Creating Kubernetes Clusters on the Cloud</title>
+
+  <para>
+    The virtual machines provided by CloudVeneto can also be used to deploy Kubernetes clusters where users familiar with Kubernetes can run their applications. <ulink url="https://kubernetes.io/">Kubernetes (k8s)</ulink> is the most popular production-grade container orchestrator.
+  </para>
+  <para>
+    In this chapter we explain how to deploy a Kubernetes cluster using <ulink url="https://www.ansible.com/">Ansible</ulink>.
+  </para>
+
+  <section id="K8sIdea">
+    <title>Intro: the idea</title>
+    <para>                                                                      
+	The provided Ansible playbooks allow you to deploy a Kubernetes cluster both on bare metal and on an OpenStack cloud. The installation is based on the kubeadm tool configured with a pre-generated admin token and flannel network. The playbooks can enrich the cluster installation with a set of services such as:
+    </para>
+    <para>
+     <itemizedlist> 
+      <listitem><para>Dashboards: k8s legacy and Grafana;</para></listitem>
+      <listitem><para>Monitoring: Prometheus operator;</para></listitem>
+      <listitem><para>Big Data Analytics: Apache Spark and Kafka operators.</para></listitem>
+     </itemizedlist> 
+    </para>  
+  </section>
+
+  <section id="SystemRequirements">
+    <title>System requirements</title>
+    <para>
+      The deployment environment requires:
+    </para>
+    <para>
+	<itemizedlist>
+          <listitem><para>Ansible 2.5.x (2.7.x not yet fully supported)</para></listitem>
+	  <listitem><para>Ubuntu 18.04</para></listitem>
+	  <listitem><para>Master and nodes must have passwordless SSH access</para></listitem>
+	</itemizedlist>
+    </para>
+  </section>
+   
+  <section id="K8sGettingStarted">
+      <title>Getting Started</title>
+      <para>
+	This section represents a quick installation and is not intended to teach you about all the components. The easiest way to get started is to clone the 'ansible-k8s' repository:
+      <screen>
+# git clone https://github.com/zangrand/ansible-k8s.git
+# cd ansible-k8s
+      </screen>
+      </para>
+      <para>
+	The directory structure should be like:
+      <screen>
+ansible-k8s/
++-- config
+|   +-- config
+|   +-- keystone_client.py
+|   +-- tls-ca-bundle.pem
++-- deploy_k8s.yaml
++-- deploy_master_openstack.yaml
++-- deploy_node_openstack.yaml
++-- group_vars
+|   +-- all
++-- inventory
++-- k8s
+|   +-- alertmanager-service.yaml
+|   +-- dashboard-setup.yaml
+|   +-- grafana-service.yaml
+|   +-- os-k8s-node.yaml
+|   +-- prometheus-service.yaml
++-- openstack_config.yaml
++-- README.md
++-- roles
+    +-- auth
+    |   +-- keystone
+    |       +-- files
+    |       |   +-- infn_ca.pem
+    |       |   +-- k8s-auth-policy.yaml
+    |       |   +-- k8s-keystone-auth.yaml
+    |       |   +-- k8s-keystone-auth.yaml_orig
+    |       |   +-- keystone_client.py
+    |       |   +-- tls-ca-bundle.pem
+    |       |   +-- webhookconfig.yaml
+    |       +-- tasks
+    |           +-- main.yml
+    +-- common
+    |   +-- tasks
+    |       +-- main.yml
+    +-- docker
+    |   +-- tasks
+    |       +-- main.yml
+    +-- kubeadm
+    |   +-- tasks
+    |       +-- main.yml
+    +-- master
+    |   +-- handlers
+    |   |   +-- main.yml
+    |   +-- tasks
+    |       +-- main.yml
+    +-- node
+    |   +-- tasks
+    |      +-- main.yml
+    +-- os-node
+    |  +-- tasks
+    |      +-- main.yml
+    +-- prometheus
+    |   +-- tasks
+    |       +-- main.yml
+    +-- spark
+        +-- tasks
+            +-- main.yml
+      </screen>
+      </para>
+    </section>
+
+    <section id="DeploymentOnCloud">
+      <title>Deployment on the cloud</title>
+
+      <para>                                                                                                   
+	The provided Ansible playbook is able to create and configure properly all hosts (i.e. the VMs) on CloudVeneto and deploy Kubernetes on it. To do it:           
+      </para>
+
+      <para>                                                                                                   
+	<itemizedlist>
+          <listitem><para>edit the file openstack_config.yaml and fill up all required attributes (i.e. OS_AUTH_URL, OS_PROJECT_NAME, OS_USERNAME, etc), the same used for accessing OpenStack by its client;</para></listitem>
+          <listitem><para>define the VMs characteristics of the master and nodes, in terms of name, flavor, and image;</para></listitem>
+          <listitem><para>specify the number of nodes (i.e. OS_NODES) of your cluster.</para></listitem>
+        </itemizedlist>
+      </para>
+
+      <para>
+	Verify if the 'shade' Python module is available on your environment, otherwise install it:
+      <screen>
+# pip install shade
+      </screen>                                                                                                   
+	Add your SSH private key to the ssh-agent. Please use the same key associated to your OpenStack Key Pair and by which you can login your VM using ssh -i cloud.key username@instance_ip.
+      <screen>
+# eval "$(ssh-agent -s)"
+Agent pid 59566
+
+# ssh-add cloud.key
+      </screen>
+      Finally execute:
+      <screen>
+# ansible-playbook deploy_master_openstack.yaml
+      </screen>
+      </para>
+      <note>
+       <para> The deployment requires a few minutes to have the full cluster up and running.</para>
+      </note>
+    </section>
+
+    <section id="HowToAccessK8sCluster">
+      <title>How to access your Kubernetes cluster</title>
+
+      <para>
+	There are two different ways to access the Kubernetes cluster: the kubectl command line tool or the dashboard.
+      </para>
+      <section id="Kubectl">
+       <title>Kubectl</title>
+       <para>
+	The kubectl command line tool is available on the master node. If you wish to access the cluster remotely please see the following guide: <ulink url="https://kubernetes.io/docs/tasks/tools/install-kubectl/">Install and Set Up kubectl</ulink>.
+       </para>
+       <para>You can enable your local kubectl to access the cluster through the Keystone authentication. To do it, copy all files contained into the folder ansible-k8s/config/ to $HOME/.kube/. </para> 
+       <para>The tls-ca-bundle.pem file is CA certificate required by the CloudVeneto OpenStack based cloud. Do not forget to source the openrc.sh with your OpenStack credentials and OS_CACERT variable set.</para> 
+       <para>Edit $HOME/.kube/config and set the IP address of your new Kubernetes master.</para>
+      </section>
+      <section id="Dashboard">
+	<title>Kubernetes Dashboard</title>
+        <para>The cluster exposes the following dashboards:</para>
+        <para><itemizedlist>
+	 <listitem><para>k8s dashboard: https://master_ip:30900</para></listitem>
+         <listitem><para>Prometheus UI: http://master_ip:30901</para></listitem>
+         <listitem><para>Alertmanager UI: http://master_ip:30902</para></listitem>
+         <listitem><para>Grafana UI: http://master_ip:30903</para></listitem>
+        </itemizedlist></para>
+        <para>To login into the k8s dashboard use the token of the kube-system:default service account. To get it, execute the following command from your environment, or from the master node:
+        <screen>
+# kubectl -n kube-system describe secret kubernetes-dashboard
+[...]
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1025 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3Vu
+dC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWU
+iOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi05cGc5NyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2
+VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY
+291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjAyYjYzZGRkLWFhYzItMTFlOC1iNTBkLWZhMTYzZTQ2OWU0ZiIsInN1
+YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTprdWJlcm5ldGVzLWRhc2hib2FyZCJ9.XPSzu31Svk
+R_xwfd3MpLQBkHc7anZlEA1FMSMrZsU6wENflLJQEPrEUJmYji24jU4vTnd2eVK1rhEB4P1iPEiVg0nCZIIhkJTtpaN
+TyefV1Uq3V9JUTxEO9rMAsfSx16yqctuSi9qgUU7Ac85ZEffJqrKrQwSkQGyCnrDuAQ11Ryl5VGWbTfTfeEP-epjm0j
+nAcI1akhkoS2xUESRV9Bq41rOtboJYv3hAe0pjOL7CHZ3mTsHMHXR_0IDQvCTx8tC9S_vU09-jK8c_4UAkoUDd5-_1D
+Pl68AckAMtgZyPSQLKnlFW50WwQt5WCwp7VGrBL_okM-E7QeTQkrUMrGTDw
+        </screen>
+        </para>
+        <note>
+	 <para>To login into the Grafana dashboard as administrator use the credentials: username=admin and password=admin. The first login requires the changing of the default password for security reasons.</para>
+	</note>
+      </section>
+    </section>
+
+    <section id="Testing">
+      <title>Testing your Kubernetes cluster</title>
+
+      <para>                                                                                                   
+	The cluster comes up by default with two k8s operators implementing the popular Big Data Analytics and Streaming platforms Apache <ulink url="https://spark.apache.org/">Spark</ulink> and <ulink url="https://kafka.apache.org/">Kafka</ulink> (you can avoid this by removing the roles spark and kafka in the file deploy_k8s.yaml).                                    
+      </para>
+
+      <para>                                                                                                   
+	You can use the Spark application spark-pi to verify that the cluster works properly. Just take the examples/spark-pi.yaml file and execute the following kubectl commands: 
+
+	<screen>                                                                                                 
+# kubectl apply -f spark-pi.yaml
+
+# kubectl get sparkapplications spark-pi
+NAME       AGE
+spark-pi   5m
+
+# kubectl describe sparkapplications spark-pi
+Name:         spark-pi
+Namespace:    default
+Labels:       none
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"sparkoperator.k8s.io/v1beta1","kind":"SparkApplication","metadata":{"annotations":{},"name":"spark-pi","namespace":"default...
+API Version:  sparkoperator.k8s.io/v1beta1
+Kind:         SparkApplication
+[...]
+
+# kubectl logs -f spark-pi-driver | grep "Pi is roughly"
+Pi is roughly 3.1458557292786464
+
+        </screen>
+
+      </para>
+      <note>
+	<para>In case of problems with the sparkoperator API Version, look at the output of <screen># kubectl api-versions</screen></para>
+      </note>
+    </section>
+
+</chapter>
