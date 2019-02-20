@@ -15,6 +15,7 @@
 	<xi:include href="Orchestration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="ManagingImages.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="ElasticCluster.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+        <xi:include href="K8sCluster.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="MicroPrimers.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="Miscellaneous.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
