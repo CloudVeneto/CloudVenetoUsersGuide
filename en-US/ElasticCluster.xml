@@ -57,8 +57,9 @@
       <title>Prerequisites</title>
       <para>
 	<itemizedlist>
-	  <listitem><para>You should be registered in the Cloud as member of a project.</para></listitem>
-
+	  <listitem><para>You should be registered in the Cloud as member of a project.
+	  <warning><para>The project where you want to create the cluster should have only one available network (i.e the lan) otherwise, due to a bug with ec2api, the instantiation of slaves fails.</para></warning>
+          </para></listitem>
 	  <listitem><para>
 	    You need to have created a SSH key-pair, ad explained in
 	    <xref linkend="CreatingAKeypair"/>.
