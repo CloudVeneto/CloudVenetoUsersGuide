@@ -784,18 +784,34 @@ INFN-Padova users can follow these instructions to install Mathematica on their 
 </para>
 
 <para>                                                                                                   
-First of all log as root on your VM and mount the directory where the installation kit is available:     
+First of all mount on your VM the directory where the installation kit is available. As root:     
                                                                                                          
 <screen>                                                                                                 
-# mount hellgate.pd.infn.it:/sw/linux mnt/                                                               
+mount hellgate.pd.infn.it:/sw/linux mnt/                                                               
 </screen>                                                                                                
+
+For Ubuntu systems:
+
+
+<screen>                                                                                                 
+sudo mount hellgate.pd.infn.it:/sw/linux mnt/                                                               
+</screen>                                                                                                
+
                                                                                                          
                                                                                                          
-Go to the relevant directory and launch the installer:                                                   
+Go to the relevant directory and launch the installer.
+As root:                                                   
                                                                                                          
 <screen>                                                                                                 
 cd mnt/Mathematica/&lt;version&gt;/Installer/                                                            
 ./MathInstaller                                                                                          
+</screen>                                                                                                
+
+For Ubuntu systems:
+
+<screen>                                                                                                 
+cd mnt/Mathematica/&lt;version&gt;/Installer/                                                            
+sudo ./MathInstaller                                                                                          
 </screen>                                                                                                
                                                                                                          
                                                                                                          
