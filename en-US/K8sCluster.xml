@@ -34,7 +34,7 @@
     </para>
     <para>
 	<itemizedlist>
-          <listitem><para>Ansible 2.5.x (2.7.x not yet fully supported)</para></listitem>
+          <listitem><para>Ansible 2.5.0+</para></listitem>
 	  <listitem><para>Ubuntu 18.04</para></listitem>
 	  <listitem><para>Master and nodes must have passwordless SSH access</para></listitem>
 	</itemizedlist>
