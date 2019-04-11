@@ -19,7 +19,7 @@ dashboard, a web based GUI.
 
 
 <para>
-To access the production service of the CloudVeneto via the 
+To access the production service of CloudVeneto via the 
 dashboard, you must simply go 
 to  <ulink url="https://cloudveneto.ict.unipd.it/dashboard/">https://cloudveneto.ict.unipd.it/dashboard/</ulink> or <ulink url="https://cloud-areapd.pd.infn.it/dashboard/">https://cloud-areapd.pd.infn.it/dashboard/</ulink>
 in a browser.
