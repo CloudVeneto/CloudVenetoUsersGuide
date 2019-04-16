@@ -71,6 +71,15 @@ nscd -i passwd
 should help.                                                                                 
 </para>
 
+<para>
+You can access instances created using these images, through ssh using the             
+Cloud keypair, considering the 'root' account, e.g.:
+
+<screen>
+ssh -i ~/private/my_key root@10.64.17.3
+</screen>
+</para>
+
 
 <note>
 <para>                                                                                       
