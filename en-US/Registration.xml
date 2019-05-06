@@ -455,7 +455,11 @@ an e-mail such as this one:
 
 
 <para>
-To manage such requests, open the OpenStack web dashboard, log in, and then 
+To manage such requests, open the OpenStack web dashboard, 
+i.e. go to 
+<ulink url="https://cloud-areapd.pd.infn.it">https://cloud-areapd.pd.infn.it</ulink>
+or <ulink url="https://cloudveneto.ict.unipd.it">https://cloudveneto.ict.unipd.it</ulink>
+in a browser. Log in, and then 
 access
 <menuchoice><guimenu>Identity</guimenu><guisubmenu>Subscriptions</guisubmenu></menuchoice>
 An image such as the following one, with the list of the pending requests,
@@ -577,7 +581,13 @@ as manager of that project you will receive an e-mail such as this one:
 
 
 <para>
-To renew the affiliation for that user, open the OpenStack web dashboard, log in, and then 
+To renew the affiliation for that user, open the OpenStack web dashboard, 
+To manage such requests, open the OpenStack web dashboard,                                                         
+i.e. go to                                                                                                         
+<ulink url="https://cloud-areapd.pd.infn.it">https://cloud-areapd.pd.infn.it</ulink>     
+or <ulink url="https://cloudveneto.ict.unipd.it">https://cloudveneto.ict.unipd.it</ulink>
+in a browser.
+Log in, and then 
 access
 <menuchoice><guimenu>Identity</guimenu><guisubmenu>Subscriptions</guisubmenu></menuchoice>.
 An image such as the following one will appear:
