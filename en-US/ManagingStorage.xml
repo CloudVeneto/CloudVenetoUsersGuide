@@ -230,6 +230,16 @@ Mount the volume:
 <screen>
 mount /dev/vdb /mnt
 </screen>
+
+<note><para>
+Please note that you can attach a volume of yours to an instance
+created by another user of the same project, but the opposite
+is not possible:
+you can't attach
+a volume created by another user to an instance of yours.
+</para></note>
+
+
 </section>
 
 <section id="DetachVolume">
